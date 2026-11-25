@@ -70,7 +70,7 @@ button,select{font:inherit;color:inherit}
 .row-main{grid-template-columns:minmax(0,2fr) minmax(0,1fr);margin-top:18px}
 .row-2{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);margin-top:18px}
 .card{background:var(--card);border-radius:var(--radius);padding:22px 24px;min-width:0}
-.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;flex-wrap:wrap}
 .card-title{font-size:18px;font-weight:600;margin:0;letter-spacing:-.01em}
 .card-sub{font-size:13px;color:var(--ink-3);margin-top:4px}
 .icon-btn{width:40px;height:40px;border-radius:50%;background:var(--soft);display:grid;place-items:center;flex:none;color:var(--ink-2)}
@@ -190,10 +190,42 @@ thead th small{display:block;font-weight:500;color:var(--ink-3);margin-top:3px}
 tfoot tr.t-row2{background:#eef3f0}
 tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 @media (max-width:760px){
-  .tg-row{grid-template-columns:minmax(0,1fr) 64px;gap:6px 12px}
-  .tg-row .prog{grid-column:1 / -1;grid-row:2}
-  .tg-row .tg-st{grid-column:1 / -1}
+  .tg-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name st" "bar pct";gap:8px 12px;align-items:center}
+  .tg-row .tg-name{grid-area:name} .tg-row .tg-pct{grid-area:pct}
+  .tg-row .prog{grid-area:bar} .tg-row .tg-st{grid-area:st}
+  .tg-row .tg-st .st{font-size:11px;padding:2px 8px}
+  .card-head .seg-ctl{width:100%}
+  .tg-gauges{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+.seg-ctl{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
+.seg-ctl button{border:0;background:none;border-radius:999px;padding:7px 12px;font-size:13px;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.seg-ctl button:hover{color:var(--ink)}
+.seg-ctl button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(20,40,30,.12)}
+.seg-ctl button em{font-style:normal;font-size:11px;background:var(--gray-bar);border-radius:999px;padding:1px 7px;color:var(--ink-2)}
+.seg-ctl button.on em{background:var(--lime);color:var(--lime-ink)}
+.tg-tools{display:flex;flex-wrap:wrap;gap:10px 20px;margin:14px 0 6px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.tg-tool{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tg-lbl{font-size:12px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.tg-gauges{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:14px}
+.gauge{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--soft);border:2px solid transparent;border-radius:18px;padding:16px 12px 14px;cursor:pointer;text-align:center;color:var(--green)}
+.gauge:hover{border-color:var(--line);background:#fff}
+.gauge .arc{stroke:currentColor}
+.gauge.warn{color:#c98a12} .gauge.bad{color:var(--down)} .gauge.alt{color:var(--orange)}
+.gauge .g-pct{position:absolute;top:68px;left:0;right:0;transform:translateY(-50%);font-size:16px;letter-spacing:-.02em;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.gauge .g-name{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.gauge .g-sub{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.gauge .st{margin-top:4px}
+.tg-colchart{margin-top:14px}
+.colbar{cursor:pointer} .colbar path{fill:var(--green);transition:filter .15s}
+.colbar.warn path{fill:#c98a12} .colbar.bad path{fill:var(--down)} .colbar.alt path{fill:var(--orange)}
+.colbar:hover path{filter:brightness(1.12)}
+.tg-legend{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:4px 16px}
+.tg-legend li{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 8px;border-radius:10px;cursor:pointer}
+.tg-legend li:hover{background:var(--soft)}
+.tg-legend b{width:22px;height:22px;border-radius:7px;background:var(--soft);display:grid;place-items:center;font-size:11px;flex:none}
+.tg-legend span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2)}
+.tg-legend em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.tg-gauges{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gauge{padding:14px 8px 12px}.gauge .g-pct{top:66px}}
 .section-label{font-size:13px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 12px}
 .foot{margin-top:24px;font-size:12px;color:var(--ink-3);text-align:center}
 .empty{color:var(--ink-3);font-size:14px;padding:20px 0}
@@ -263,8 +295,8 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 </div>
 <div class="tooltip" id="tt" role="tooltip"></div>
 
-<script src="data.js?v=3"></script>
-<script src="live.js?v=3"></script>
+<script src="data.js?v=4"></script>
+<script src="live.js?v=4"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
@@ -288,6 +320,7 @@ setData(window.UPKD_DATA);
 
 const state = { tab: 'all', desa: null, ind: {} };
 try { const s = JSON.parse(localStorage.getItem('upkd-state') || '{}'); Object.assign(state, s); } catch (e) {}
+state.tg = Object.assign({view: 'list', sort: 'asc', status: 'all', cat: 'all'}, state.tg || {});
 const save = () => { try { localStorage.setItem('upkd-state', JSON.stringify(state)); } catch (e) {} };
 
 /* ---------- helpers ---------- */
@@ -558,25 +591,124 @@ function spmCompareCard() {
   </div>`;
 }
 
-// daftar capaian target per indikator (total ÷ target), atau kontribusi desa terpilih
-function targetCard(cat) {
-  const inds = targetInds(cat); if (!inds.length) return '';
-  const rows = inds.map(i => {
+// ---------- Capaian Target: sortir, filter status/kategori, 3 tampilan grafik ----------
+const TG_DEF = {view: 'list', sort: 'asc', status: 'all', cat: 'all'};
+const shortName = s => title(s).replace(/^Pelayanan Kesehatan\s+/i, '');
+function tgRows(cat) {
+  const tg = state.tg;
+  let inds = targetInds(cat);
+  if (cat === 'all' && tg.cat !== 'all') inds = inds.filter(i => i.category === tg.cat);
+  let rows = inds.map(i => {
     const tot = aggregate(i.id), v = state.desa ? current(i.id) : tot;
     return {i, v, p: pctT(v, i.id), pTot: pctT(tot, i.id)};
-  }).sort((a, b) => (a.pTot ?? 999) - (b.pTot ?? 999));
-  const n = {good: 0, warn: 0, bad: 0}; rows.forEach(r => r.pTot != null && n[STATUS(r.pTot).cls]++);
-  return `<div class="card">
+  });
+  const counts = {all: rows.length, good: 0, warn: 0, bad: 0};
+  rows.forEach(r => r.pTot != null && counts[STATUS(r.pTot).cls]++);
+  if (tg.status !== 'all') rows = rows.filter(r => r.pTot != null && STATUS(r.pTot).cls === tg.status);
+  const key = r => state.desa ? (r.p ?? -1) : (r.pTot ?? -1);
+  if (tg.sort === 'asc') rows.sort((a, b) => key(a) - key(b));
+  else if (tg.sort === 'desc') rows.sort((a, b) => key(b) - key(a));
+  else rows.sort((a, b) => shortName(a.i.name).localeCompare(shortName(b.i.name), 'id'));
+  return {rows, counts};
+}
+const seg = (name, opts, cur) => `<div class="seg-ctl" role="group">${opts.map(([v, label]) =>
+  `<button data-tg="${name}" data-v="${v}" class="${v === cur ? 'on' : ''}" aria-pressed="${v === cur}">${label}</button>`).join('')}</div>`;
+const VIEW_ICON = {
+  list: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h13"/></svg>',
+  gauge: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 16a8 8 0 1 1 16 0"/><path d="m12 16 4-5"/></svg>',
+  col: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 20V11M12 20V5M18 20v-6"/></svg>',
+};
+function targetCard(cat) {
+  if (!targetInds(cat).length) return '';
+  const tg = state.tg, {rows, counts} = tgRows(cat);
+  const cats = [...new Set(targetInds(cat).map(i => i.category))];
+  const statusOpts = [['all', `Semua <em>${counts.all}</em>`], ['good', `✓ Tercapai <em>${counts.good}</em>`],
+    ['warn', `! Mendekati <em>${counts.warn}</em>`], ['bad', `↓ Di bawah target <em>${counts.bad}</em>`]];
+  const body = !rows.length ? `<div class="empty">Tidak ada indikator untuk filter ini.</div>`
+    : tg.view === 'gauge' ? tgGauges(rows) : tg.view === 'col' ? tgColumns(rows) : tgList(rows);
+  return `<div class="card" id="tgCard">
     <div class="card-head"><div><h2 class="card-title">${state.desa ? `Kontribusi ${esc(state.desa)} terhadap Target` : 'Capaian Target'}</h2>
-      <div class="card-sub">${state.desa ? 'Nilai desa ÷ target wilayah' : 'Total semua desa ÷ target'} · diurutkan dari capaian terendah · klik untuk lihat grafik</div></div>
-      ${state.desa ? '' : `<div class="st-sum">${statusChip(100)} ${n.good} · ${statusChip(80)} ${n.warn} · ${statusChip(0)} ${n.bad}</div>`}</div>
-    <div class="tg-list">${rows.map(r => `<button class="tg-row" data-pick="${r.i.id}">
-      <span class="tg-name">${esc(title(r.i.name))}<small>${fmt(r.v, r.i)} / ${fmt(r.i.target, r.i)}${r.i.percent ? ' (rata-rata desa)' : ''}</small></span>
-      ${progBar(r.p, state.desa ? 'alt' : (r.pTot != null ? STATUS(r.pTot).cls : ''))}
-      <span class="tg-pct">${fmtP(r.p)}</span>
-      <span class="tg-st">${state.desa ? `<small>Total wilayah ${fmtP(r.pTot)}</small>` : statusChip(r.p)}</span>
-    </button>`).join('')}</div>
+      <div class="card-sub">${state.desa ? 'Nilai desa ÷ target wilayah · filter status mengikuti capaian total wilayah' : 'Total semua desa ÷ target'} · klik indikator untuk lihat grafik</div></div>
+      ${seg('view', [['list', VIEW_ICON.list + 'Daftar'], ['gauge', VIEW_ICON.gauge + 'Gauge'], ['col', VIEW_ICON.col + 'Kolom']], tg.view)}</div>
+    <div class="tg-tools">
+      <div class="tg-tool"><span class="tg-lbl">Urutkan</span>${seg('sort', [['asc', '↑ Terendah'], ['desc', '↓ Tertinggi'], ['az', 'A–Z']], tg.sort)}</div>
+      <div class="tg-tool"><span class="tg-lbl">Status</span>${seg('status', statusOpts, tg.status)}</div>
+      ${cat === 'all' && cats.length > 1 ? `<div class="tg-tool"><span class="tg-lbl">Kategori</span>${seg('cat',
+        [['all', 'Semua'], ...cats.map(c => [c, c === 'spm' ? 'SPM' : c === 'upkd' ? 'Pelayanan UPKD' : esc(CAT[c].label)])], tg.cat)}</div>` : ''}
+    </div>
+    <div class="tg-body">${body}</div>
   </div>`;
+}
+function tgList(rows) {
+  return `<div class="tg-list">${rows.map(r => `<button class="tg-row" data-pick="${r.i.id}">
+    <span class="tg-name">${esc(shortName(r.i.name))}<small>${fmt(r.v, r.i)} / ${fmt(r.i.target, r.i)}${r.i.percent ? ' (rata-rata desa)' : ''}</small></span>
+    ${progBar(r.p, state.desa ? 'alt' : (r.pTot != null ? STATUS(r.pTot).cls : ''))}
+    <span class="tg-pct">${fmtP(r.p)}</span>
+    <span class="tg-st">${state.desa ? `<small>Wilayah ${fmtP(r.pTot)}</small>` : statusChip(r.p)}</span>
+  </button>`).join('')}</div>`;
+}
+function tgGauges(rows) {
+  const R = 38, C = 2 * Math.PI * R;
+  return `<div class="tg-gauges">${rows.map(r => {
+    const p = r.p ?? 0, len = Math.min(p, 100) / 100 * C;
+    const cls = state.desa ? 'alt' : (r.pTot != null ? STATUS(r.pTot).cls : '');
+    return `<button class="gauge ${cls}" data-pick="${r.i.id}">
+      <svg viewBox="0 0 100 100" width="104" height="104" aria-hidden="true">
+        <circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--gray-bar)" stroke-width="9"/>
+        <circle class="arc" cx="50" cy="50" r="${R}" fill="none" stroke-width="9" stroke-linecap="round"
+          stroke-dasharray="${len.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 50 50)"/>
+        ${p > 100 ? `<circle cx="50" cy="${50 - R}" r="5.5" fill="#fff" stroke="currentColor" stroke-width="2.5"/>` : ''}
+      </svg>
+      <span class="g-pct">${fmtP(r.p)}</span>
+      <span class="g-name">${esc(shortName(r.i.name))}</span>
+      <span class="g-sub">${fmt(r.v, r.i)} / ${fmt(r.i.target, r.i)}</span>
+      ${state.desa ? `<span class="g-sub">Wilayah ${fmtP(r.pTot)}</span>` : statusChip(r.p)}
+    </button>`;
+  }).join('')}</div>`;
+}
+function tgColumns(rows) {
+  const appW = document.getElementById('app').clientWidth || 1200, narrow = appW < 700;
+  const W = narrow ? Math.max(300, appW - 36) : 1000, H = 300, pl = 44, pr = 10, pt = 22, pb = 28;
+  const maxP = Math.max(100, ...rows.map(r => r.p ?? 0));
+  const max = Math.ceil(maxP / 25) * 25 + (maxP % 25 === 0 ? 0 : 0);
+  const iw = W - pl - pr, ih = H - pt - pb, slot = iw / rows.length, bw = Math.min(46, slot * .62);
+  const y = v => pt + ih - v / max * ih;
+  let g = '';
+  for (let t = 0; t <= max; t += 25) g += `<line x1="${pl}" x2="${W - pr}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" ${t ? 'stroke-dasharray="3 4"' : ''}/>
+    <text x="${pl - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)">${t}%</text>`;
+  const bars = rows.map((r, k) => {
+    const cx = pl + slot * k + slot / 2, p = r.p ?? 0, top = y(p), h = Math.max(pt + ih - top, 2), rad = Math.min(5, bw / 2, h);
+    const cls = state.desa ? 'alt' : (r.pTot != null ? STATUS(r.pTot).cls : '');
+    return `<g class="colbar ${cls}" data-pick="${r.i.id}" data-k="${k}">
+      <rect x="${pl + slot * k}" y="${pt}" width="${slot}" height="${ih + pb}" fill="transparent"/>
+      <path d="M${cx - bw / 2},${pt + ih} V${top + rad} Q${cx - bw / 2},${top} ${cx - bw / 2 + rad},${top} H${cx + bw / 2 - rad} Q${cx + bw / 2},${top} ${cx + bw / 2},${top + rad} V${pt + ih} Z"/>
+      ${slot > 30 ? `<text x="${cx}" y="${top - 6}" text-anchor="middle" font-size="${narrow ? 9 : 11}" font-weight="600" fill="var(--ink)">${nf.format(Math.round(p))}%</text>` : ''}
+      <text x="${cx}" y="${H - 9}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${k + 1}</text></g>`;
+  }).join('');
+  const line100 = `<line x1="${pl}" x2="${W - pr}" y1="${y(100)}" y2="${y(100)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text x="${W - pr}" y="${y(100) - 6}" text-anchor="end" font-size="11" font-weight="600" fill="var(--ink)">Target 100%</text>`;
+  return `<div class="chart tg-colchart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik kolom capaian target">${g}${bars}${line100}</svg></div>
+    <ol class="tg-legend">${rows.map((r, k) => `<li data-pick="${r.i.id}"><b>${k + 1}</b><span>${esc(shortName(r.i.name))}</span><em>${fmtP(r.p)}</em></li>`).join('')}</ol>`;
+}
+// pasang event untuk kartu Capaian Target (dipanggil dari bind & saat kartu di-render ulang sendiri)
+function bindTg(card) {
+  if (!card) return;
+  card.querySelectorAll('[data-tg]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    state.tg[b.dataset.tg] = b.dataset.v; save();
+    const fresh = document.createElement('div'); fresh.innerHTML = targetCard(state.tab);
+    const nc = fresh.firstElementChild; card.replaceWith(nc);
+    bindTg(nc); bindPicks(nc);
+    if (motionOK) animInner(nc.querySelector('.tg-body'), true);
+  });
+  const {rows} = tgRows(state.tab);
+  card.querySelectorAll('.colbar').forEach(el => {
+    const r = rows[+el.dataset.k]; if (!r) return;
+    el.addEventListener('mousemove', e => showTip(e, `<div class="tt-title">${esc(shortName(r.i.name))}</div>
+      <div class="tt-row">${fmtP(r.p)} ${state.desa ? 'kontribusi' : 'capaian'}</div>
+      <div class="tt-title" style="margin:4px 0 0">${fmt(r.v, r.i)} dari target ${fmt(r.i.target, r.i)}</div>`));
+    el.addEventListener('mouseleave', hideTip);
+  });
 }
 
 // matriks kontribusi: setiap sel = nilai desa ÷ target indikator
@@ -668,7 +800,17 @@ function animInner(card, fast) {
   if (prog.length) G.from(prog, {width: 0, duration: 1 * d, ease: 'power3.out', stagger: .03, delay: .1});
   const segs = card.querySelectorAll('.contrib .seg');
   if (segs.length) G.from(segs, {scaleX: 0, transformOrigin: '0% 50%', duration: .5 * d, ease: 'power2.out', stagger: .08, delay: .2});
-  card.querySelectorAll('.tg-pct').forEach(el => countUp(el, 1 * d));
+  card.querySelectorAll('.tg-pct, .g-pct').forEach(el => countUp(el, 1 * d));
+  const arcs = card.querySelectorAll('.gauge .arc');
+  if (arcs.length) G.from(arcs, {attr: {'stroke-dasharray': '0 999'}, duration: 1.1 * d, ease: 'power3.out', stagger: .04});
+  const gs = card.querySelectorAll('.gauge');
+  if (gs.length) G.from(gs, {autoAlpha: 0, scale: .9, duration: .45 * d, ease: 'back.out(1.6)', stagger: .03});
+  const cols = card.querySelectorAll('.colbar path');
+  if (cols.length) G.from(cols, {scaleY: 0, transformOrigin: '50% 100%', duration: .8 * d, ease: 'back.out(1.3)', stagger: .04});
+  const colTxt = card.querySelectorAll('.colbar text[font-weight="600"]');
+  if (colTxt.length) G.from(colTxt, {autoAlpha: 0, y: 6, duration: .3, delay: .5 * d, stagger: .02});
+  const tgRowsEl = card.querySelectorAll('.tg-row, .tg-legend li');
+  if (tgRowsEl.length) G.from(tgRowsEl, {autoAlpha: 0, x: -14, duration: .35 * d, ease: 'power2.out', stagger: .025});
   const stack = card.querySelectorAll('.stack span');
   if (stack.length) G.from(stack, {scaleX: 0, transformOrigin: '0% 50%', duration: .8 * d, ease: 'power3.out', stagger: .04});
   const rows = card.querySelectorAll('tbody tr');
@@ -710,16 +852,20 @@ function runAnim(mode) {
 }
 addEventListener('beforeprint', () => { if (motionOK) G.set('#app .card, #app .tile', {autoAlpha: 1, y: 0}); });
 
-function bind(ind) {
-  const app = document.getElementById('app');
-  const sel = document.getElementById('indSel');
-  if (sel) sel.onchange = () => { state.ind[state.tab] = sel.value; render(); };
-  app.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
+function bindPicks(root) {
+  root.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
     const id = b.dataset.pick;
     if (state.tab !== 'all' && IND[id].category !== state.tab) state.tab = 'all';
     state.ind[state.tab] = id; render();
     document.getElementById('barChart')?.scrollIntoView({behavior: 'smooth', block: 'center'});
   });
+}
+function bind(ind) {
+  const app = document.getElementById('app');
+  const sel = document.getElementById('indSel');
+  if (sel) sel.onchange = () => { state.ind[state.tab] = sel.value; render(); };
+  bindPicks(app);
+  bindTg(document.getElementById('tgCard'));
   app.querySelectorAll('.bar, .rank li, tbody tr[data-desa], .stack-row, .contrib .seg').forEach(el => el.addEventListener('click', () => toggleDesa(el.dataset.desa)));
   app.querySelectorAll('.bar').forEach(el => {
     const d = D.villages[+el.dataset.i], v = val(d, ind.id), tot = aggregate(ind.id);

@@ -3,7 +3,7 @@ window.UPKD_DATA = {
  "subtitle": "PKM Panumbangan",
  "period": "s.d. November 2026",
  "source": "Google Sheets (cadangan)",
- "generated": "2026-11-25 06:57",
+ "generated": "2026-11-25 23:06",
  "categories": [
   {
    "id": "penduduk",
@@ -44,84 +44,84 @@ window.UPKD_DATA = {
   {
    "id": "spm_5",
    "category": "spm",
-   "name": "IBU HAMIL (k1 Akses)",
+   "name": "PELAYANAN KESEHATAN IBU HAMIL (k1 Akses)",
    "percent": false,
    "target": 440
   },
   {
    "id": "spm_6",
    "category": "spm",
-   "name": "IBU BERSALIN",
+   "name": "PELAYANAN KESEHATAN IBU BERSALIN",
    "percent": false,
    "target": 440
   },
   {
    "id": "spm_7",
    "category": "spm",
-   "name": "BAYI BARU LAHIR",
+   "name": "PELAYANAN KESEHATAN BAYI BARU LAHIR",
    "percent": false,
    "target": 413
   },
   {
    "id": "spm_8",
    "category": "spm",
-   "name": "BALITA (yang dipantau tumbang)",
+   "name": "PELAYANAN KESEHATAN BALITA (yang dipantau tumbang)",
    "percent": false,
    "target": 2024
   },
   {
    "id": "spm_9",
    "category": "spm",
-   "name": "USIA PENDIDIKAN DASAR",
+   "name": "PELAYANAN KESEHATAN USIA PENDIDIKAN DASAR",
    "percent": false,
    "target": 3484
   },
   {
    "id": "spm_10",
    "category": "spm",
-   "name": "USIA PRODUKTIF",
+   "name": "PELAYANAN KESEHATAN USIA PRODUKTIF",
    "percent": false,
    "target": 7467
   },
   {
    "id": "spm_11",
    "category": "spm",
-   "name": "USIA LANJUT",
+   "name": "PELAYANAN KESEHATAN USIA LANJUT",
    "percent": false,
    "target": 4099
   },
   {
    "id": "spm_12",
    "category": "spm",
-   "name": "PENDERITA HIPERTENSI",
+   "name": "PELAYANAN KESEHATAN PENDERITA HIPERTENSI",
    "percent": false,
    "target": 1958
   },
   {
    "id": "spm_13",
    "category": "spm",
-   "name": "PENDERITA DIABETES MELITUS",
+   "name": "PELAYANAN KESEHATAN PENDERITA DIABETES MELITUS",
    "percent": false,
    "target": 550
   },
   {
    "id": "spm_14",
    "category": "spm",
-   "name": "ORANG DENGAN GANGGUAN JIWA BERAT",
+   "name": "PELAYANAN KESEHATAN ORANG DENGAN GANGGUAN JIWA BERAT",
    "percent": false,
    "target": 101
   },
   {
    "id": "spm_15",
    "category": "spm",
-   "name": "ORANG TERDUGA TUBERKULOSIS",
+   "name": "PELAYANAN KESEHATAN ORANG TERDUGA TUBERKULOSIS",
    "percent": false,
    "target": 384
   },
   {
    "id": "spm_16",
    "category": "spm",
-   "name": "ORANG DENGAN RISIKO TERINFEKSI HIV",
+   "name": "PELAYANAN KESEHATAN ORANG DENGAN RISIKO TERINFEKSI HIV",
    "percent": false,
    "target": 679
   },
@@ -242,14 +242,15 @@ window.UPKD_DATA = {
    "id": "upkd_35",
    "category": "upkd",
    "name": "ANGKA BEBAS JENTIK",
-   "percent": true
+   "percent": true,
+   "target": 100
   },
   {
    "id": "upkd_36",
    "category": "upkd",
    "name": "JUMLAH PESERTA CKG",
    "percent": false,
-   "target": 28457
+   "target": 14229
   },
   {
    "id": "upkd_37",
@@ -302,7 +303,7 @@ window.UPKD_DATA = {
     "upkd_32": 47,
     "upkd_33": 9,
     "upkd_34": 0,
-    "upkd_35": null,
+    "upkd_35": 96,
     "upkd_36": 2054,
     "upkd_37": 159,
     "upkd_38": 24
@@ -345,7 +346,7 @@ window.UPKD_DATA = {
     "upkd_32": 51,
     "upkd_33": 15,
     "upkd_34": 1,
-    "upkd_35": null,
+    "upkd_35": 99,
     "upkd_36": 2615,
     "upkd_37": 98,
     "upkd_38": 20
@@ -388,7 +389,7 @@ window.UPKD_DATA = {
     "upkd_32": 44,
     "upkd_33": 15,
     "upkd_34": 0,
-    "upkd_35": null,
+    "upkd_35": 99,
     "upkd_36": 3152,
     "upkd_37": 67,
     "upkd_38": 16
@@ -431,7 +432,7 @@ window.UPKD_DATA = {
     "upkd_32": 28,
     "upkd_33": 9,
     "upkd_34": 0,
-    "upkd_35": null,
+    "upkd_35": 96,
     "upkd_36": 1932,
     "upkd_37": 46,
     "upkd_38": 16
@@ -473,8 +474,8 @@ window.UPKD_DATA = {
     "upkd_31": 18,
     "upkd_32": 24,
     "upkd_33": 4,
-    "upkd_34": 1,
-    "upkd_35": null,
+    "upkd_34": 2,
+    "upkd_35": 98,
     "upkd_36": 1789,
     "upkd_37": 16,
     "upkd_38": 13
@@ -507,7 +508,7 @@ window.UPKD_DATA = {
     "upkd_22": null,
     "upkd_23": 3,
     "upkd_24": 7,
-    "upkd_25": null,
+    "upkd_25": 87,
     "upkd_26": null,
     "upkd_27": null,
     "upkd_28": 169,
@@ -516,8 +517,8 @@ window.UPKD_DATA = {
     "upkd_31": 49,
     "upkd_32": 36,
     "upkd_33": 15,
-    "upkd_34": 0,
-    "upkd_35": null,
+    "upkd_34": 2,
+    "upkd_35": 98,
     "upkd_36": 2202,
     "upkd_37": 31,
     "upkd_38": 12
@@ -534,8 +535,8 @@ window.UPKD_DATA = {
    "spm_9": 3484,
    "spm_10": 6189,
    "spm_11": 3651,
-   "spm_12": 1331,
-   "spm_13": 215,
+   "spm_12": 1330,
+   "spm_13": 212,
    "spm_14": 63,
    "spm_15": 420,
    "spm_16": 539
