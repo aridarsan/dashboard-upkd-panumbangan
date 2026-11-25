@@ -60,6 +60,9 @@ window.UPKD_LIVE = (() => {
       if (/^\d+$/.test(first) && clean(r[1])) {
         villages.push({no: +first, name: titleCase(clean(r[1])),
           values: Object.fromEntries(indicators.map(i => [i.id, num(r[i.col])]))});
+      } else if (first === 'TARGET') {
+        // baris target: nilai pembagi untuk % capaian & kontribusi desa
+        indicators.forEach(i => { const v = num(r[i.col]); if (v) i.target = v; });
       } else if (first.startsWith('DATA SPM')) {
         const values = {};
         indicators.filter(i => i.category === 'spm').forEach(i => { const v = num(r[i.col]); if (v != null) values[i.id] = v; });

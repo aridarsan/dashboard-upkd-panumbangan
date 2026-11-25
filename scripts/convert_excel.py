@@ -3,15 +3,17 @@
 Pemakaian:
     pip install openpyxl
     python scripts/convert_excel.py "path/ke/Data Pelayanan UPKD.xlsx"
+    python scripts/convert_excel.py "export-google-sheets.csv"   # juga bisa CSV
 
 Hasil ditulis ke data.js di folder root dashboard.
 """
+import csv
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
 
-import openpyxl
 
 # Kolom (indeks 0-based) -> kategori. Header baris 1 = grup, baris 2 = nama indikator.
 GROUPS = [
@@ -27,11 +29,29 @@ def clean(s):
     return " ".join(str(s).split()) if s is not None else ""
 
 
-def main(path):
+def num_id(s):
+    """Angka format Indonesia di CSV: '3.003' -> 3003, '54,1' -> 54.1."""
+    s = clean(s).rstrip("%")
+    if not re.fullmatch(r"-?[\d.,]+", s):
+        return s or None
+    v = float(s.replace(".", "").replace(",", "."))
+    return int(v) if v.is_integer() else v
+
+
+def read_rows(path):
+    if str(path).lower().endswith(".csv"):
+        with open(path, encoding="utf-8-sig", newline="") as f:
+            rows = [[num_id(c) for c in r] for r in csv.reader(f)]
+        width = max(len(r) for r in rows)
+        return [r + [None] * (width - len(r)) for r in rows]
+    import openpyxl
     wb = openpyxl.load_workbook(path, data_only=True)
-    ws = wb.worksheets[0]
-    rows = list(ws.iter_rows(values_only=True))
-    header = rows[1]
+    return [list(r) for r in wb.worksheets[0].iter_rows(values_only=True)]
+
+
+def main(path):
+    rows = read_rows(path)
+    header = [clean(h) if h is not None else "" for h in rows[1]]
 
     indicators = []
     for key, label, start, end in GROUPS:
@@ -58,6 +78,12 @@ def main(path):
                 "name": clean(r[1]).title(),
                 "values": {i["id"]: r[i["col"]] for i in indicators},
             })
+        elif first == "TARGET":
+            # baris target: pembagi untuk % capaian & kontribusi desa
+            for i in indicators:
+                v = r[i["col"]]
+                if isinstance(v, (int, float)) and v:
+                    i["target"] = v
         elif first.startswith("DATA SPM"):
             compare = {
                 "label": clean(r[0]).title(),

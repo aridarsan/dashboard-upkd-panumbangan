@@ -22,6 +22,13 @@ Dashboard mengambil data dari Google Sheets yang dipublikasikan sebagai CSV (lin
 - Google men-cache CSV yang dipublikasikan, jadi perubahan di Sheets biasanya baru muncul 1–5 menit kemudian.
 - Susunan kolom & baris di Sheets harus tetap sama dengan format Excel (2 baris header, baris desa bernomor, baris "DATA SPM SD ...").
 
+## Baris TARGET
+Baris berlabel `TARGET` di kolom A (di bawah baris TOTAL) dipakai sebagai pembagi:
+- **% Capaian** = total semua desa ÷ target (kolom persentase seperti D/S memakai rata-rata desa ÷ target).
+- **% Kontribusi desa** = nilai desa ÷ target wilayah.
+- Status: ≥100% *Tercapai*, 75–99% *Mendekati*, <75% *Di bawah target*.
+Kolom tanpa nilai target tidak dihitung persentasenya.
+
 ## Memperbarui data cadangan (data.js)
 Saat ada file Excel baru (format kolom sama):
 ```bash

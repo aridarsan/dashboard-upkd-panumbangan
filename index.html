@@ -152,6 +152,48 @@ td.na{color:var(--ink-3)}
 .chg{display:inline-flex;align-items:center;gap:3px;font-weight:600}
 .chg.up{color:var(--up)} .chg.down{color:var(--down)} .chg.zero{color:var(--ink-3)}
 
+.prog{height:8px;border-radius:4px;background:var(--gray-bar);overflow:hidden;min-width:60px}
+.prog span{display:block;height:100%;border-radius:4px;background:var(--green)}
+.prog.warn span{background:#c98a12} .prog.bad span{background:var(--down)} .prog.alt span{background:var(--orange)}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.st b{font-size:11px}
+.st.good{background:#e3f4ea;color:#17683f} .st.warn{background:#fbf0d9;color:#8a5a00} .st.bad{background:#fbe5e1;color:#a5281a}
+.st-txt{font-weight:700} .st-txt.good{color:#17683f} .st-txt.warn{color:#8a5a00} .st-txt.bad{color:#a5281a}
+.st-sum{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.kpi-target{margin:-2px 0 12px}
+.kpi-tline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--ink-2)}
+.kpi .kpi-value{margin-bottom:12px}
+.t-target{margin-top:10px} .t-target .t-note{margin-top:6px;color:var(--ink-2)}
+.badge.alt{background:#ffe7d6;color:#8a3a00}
+.hero-note{font-size:13px;color:var(--ink-2)}
+.contrib{margin:12px 0 6px}
+.contrib-bar{position:relative;display:flex;gap:2px;height:14px;border-radius:5px;background:var(--gray-bar)}
+.contrib-bar .seg{height:100%;background:var(--green);cursor:pointer;transition:filter .15s}
+.contrib-bar .seg:nth-child(even){background:#3fa877}
+.contrib-bar .seg:first-child{border-radius:5px 0 0 5px}
+.contrib-bar .seg.dim{background:#b9c9bf} .contrib-bar .seg.sel{background:var(--orange)}
+.contrib-bar .seg:hover{filter:brightness(1.12)}
+.contrib-bar .tmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px;transform:translateX(-1px)}
+.contrib-axis{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-3);margin-top:6px}
+.rank .r-val{text-align:right}
+.rank .r-val small{display:block;font-size:11px;font-weight:500;color:var(--ink-3)}
+.tg-list{display:flex;flex-direction:column;gap:4px;margin-top:12px}
+.tg-row{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,3fr) 64px 150px;align-items:center;gap:16px;
+  background:none;border:0;border-radius:12px;padding:10px 12px;text-align:left;cursor:pointer;width:100%}
+.tg-row:hover{background:var(--soft)}
+.tg-name{font-size:14px;font-weight:500;min-width:0}
+.tg-name small{display:block;font-size:12px;font-weight:400;color:var(--ink-3);margin-top:2px;font-variant-numeric:tabular-nums}
+.tg-pct{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.tg-st small{font-size:12px;color:var(--ink-3)}
+table.matrix td{font-weight:500}
+thead th small{display:block;font-weight:500;color:var(--ink-3);margin-top:3px}
+tfoot tr.t-row2{background:#eef3f0}
+tfoot tr.t-row2 td{border-top:1px solid var(--line)}
+@media (max-width:760px){
+  .tg-row{grid-template-columns:minmax(0,1fr) 64px;gap:6px 12px}
+  .tg-row .prog{grid-column:1 / -1;grid-row:2}
+  .tg-row .tg-st{grid-column:1 / -1}
+}
 .section-label{font-size:13px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 12px}
 .foot{margin-top:24px;font-size:12px;color:var(--ink-3);text-align:center}
 .empty{color:var(--ink-3);font-size:14px;padding:20px 0}
@@ -221,8 +263,8 @@ td.na{color:var(--ink-3)}
 </div>
 <div class="tooltip" id="tt" role="tooltip"></div>
 
-<script src="data.js"></script>
-<script src="live.js"></script>
+<script src="data.js?v=3"></script>
+<script src="live.js?v=3"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
@@ -267,6 +309,24 @@ function aggregate(id) {
 const current = (id) => state.desa ? val(D.villages.find(v => v.name === state.desa), id) : aggregate(id);
 const reported = id => D.villages.filter(v => isNum(val(v, id))).length;
 const catInds = cat => D.indicators.filter(i => cat === 'all' || i.category === cat);
+/* ---- target: capaian (total ÷ target) & kontribusi desa (nilai desa ÷ target) ---- */
+const tgt = id => IND[id] && IND[id].target;
+const pctT = (v, id) => isNum(v) && tgt(id) ? v / tgt(id) * 100 : null;
+const fmtP = p => p == null ? '–' : nf.format(p) + '%';
+const STATUS = p => p >= 100 ? {cls: 'good', icon: '✓', label: 'Tercapai'}
+  : p >= 75 ? {cls: 'warn', icon: '!', label: 'Mendekati'} : {cls: 'bad', icon: '↓', label: 'Di bawah target'};
+const statusChip = p => { if (p == null) return ''; const s = STATUS(p); return `<span class="st ${s.cls}"><b>${s.icon}</b>${s.label}</span>`; };
+const progBar = (p, cls = '') => `<div class="prog ${cls}"><span style="width:${Math.min(p || 0, 100)}%"></span></div>`;
+const targetInds = cat => catInds(cat).filter(i => i.target);
+// kalimat ringkas capaian/kontribusi untuk indikator ber-target
+function targetLine(id) {
+  const ind = IND[id], t = tgt(id); if (!t) return '';
+  if (state.desa) {
+    const v = current(id), p = pctT(v, id);
+    return ind.percent ? `${fmtP(p)} dari target ${fmt(t, ind)}` : `Kontribusi ${fmtP(p)} dari target ${fmt(t, ind)}`;
+  }
+  return `${fmtP(pctT(aggregate(id), id))} dari target ${fmt(t, ind)}`;
+}
 function selectedInd() {
   const list = state.tab === 'all' ? D.indicators : catInds(state.tab);
   let id = state.ind[state.tab];
@@ -323,9 +383,11 @@ function kpiCards() {
   return `<div class="grid kpis">` + KPI_ALL.map(k => {
     const v = current(k.ind.id), tot = aggregate(k.ind.id);
     const share = state.desa && isNum(v) && tot ? `<span class="delta up">${nf.format(v / tot * 100)}%</span> dari total` : `Total ${D.villages.length} desa`;
+    const t = tgt(k.ind.id), p = state.desa ? pctT(v, k.ind.id) : pctT(tot, k.ind.id);
     return `<div class="card kpi">
       <div class="card-head"><div class="kpi-name">${k.label}</div><div class="icon-btn">${icon(k.icon)}</div></div>
       <div class="kpi-value">${fmt(v, k.ind)}</div>
+      ${t ? `<div class="kpi-target">${progBar(p)}<div class="kpi-tline"><span>${targetLine(k.ind.id)}</span>${state.desa ? '' : statusChip(p)}</div></div>` : ''}
       <div class="kpi-foot"><span>${share}</span>
         <button class="link" data-pick="${k.ind.id}">Lihat grafik ${icon('arrow', 14)}</button></div>
     </div>`;
@@ -351,6 +413,7 @@ function tiles(cat, active) {
     return `<button class="tile ${i.id === active.id ? 'active' : ''}" data-pick="${i.id}">
       <div class="t-name">${esc(title(i.name))}</div>
       <div class="t-row"><div class="t-val">${fmt(current(i.id), i)}</div>${microBars(i.id)}</div>
+      ${i.target ? `<div class="t-target">${progBar(pctT(current(i.id), i.id))}<div class="t-note">${targetLine(i.id)}</div></div>` : ''}
       <div class="t-note">${note}</div></button>`;
   }).join('') + `</div>`;
 }
@@ -406,6 +469,30 @@ function niceStep(x) {
 }
 const shortNum = v => v >= 1000 ? nf.format(v / 1000) + 'rb' : nf.format(v);
 
+function heroTarget(ind) {
+  const t = ind.target; if (!t) return '';
+  const tot = aggregate(ind.id), p = pctT(tot, ind.id);
+  if (state.desa) {
+    const pd = pctT(current(ind.id), ind.id);
+    return `<span class="badge alt">${ind.percent ? '' : 'Kontribusi '}${fmtP(pd)} dari target</span>`;
+  }
+  const gap = t - tot;
+  return `<span class="badge">${fmtP(p)} dari target</span>${statusChip(p)}
+    <span class="hero-note">Target ${fmt(t, ind)} · ${gap > 0 ? `kurang ${fmt(gap, ind)}` : `lebih ${fmt(-gap, ind)}`}</span>`;
+}
+// bar bertumpuk: kontribusi tiap desa terhadap target (lebar = nilai desa ÷ target)
+function contribBar(ind) {
+  const t = ind.target; if (!t || ind.percent) return '';
+  const tot = aggregate(ind.id) || 0, scale = Math.max(t, tot);
+  const segs = D.villages.map((d, i) => ({d, i, v: val(d, ind.id)})).filter(s => isNum(s.v) && s.v > 0);
+  return `<div class="contrib" aria-label="Kontribusi desa terhadap target">
+    <div class="contrib-bar">${segs.map(s => `<span class="seg ${state.desa ? (s.d.name === state.desa ? 'sel' : 'dim') : ''}"
+        data-desa="${esc(s.d.name)}" data-i="${s.i}" style="width:${s.v / scale * 100}%"></span>`).join('')}
+      <i class="tmark" style="left:${t / scale * 100}%" title="Target ${fmt(t, ind)}"></i></div>
+    <div class="contrib-axis"><span>Kontribusi desa terhadap target (arahkan kursor ke tiap segmen)</span><span>Target ${fmt(t, ind)}</span></div>
+  </div>`;
+}
+
 function mainCard(ind) {
   const v = current(ind.id), tot = aggregate(ind.id);
   const share = state.desa && isNum(v) && tot && !ind.percent ? `<span class="badge">${nf.format(v / tot * 100)}% dari total</span>` : '';
@@ -415,7 +502,8 @@ function mainCard(ind) {
       <div><h2 class="card-title">Capaian per Desa</h2><div class="card-sub">${esc(CAT[ind.category].label)}</div></div>
       ${indicatorSelect(ind)}
     </div>
-    <div class="hero"><span class="hero-num">${fmt(v, ind)}</span>${share}</div>
+    <div class="hero"><span class="hero-num">${fmt(v, ind)}</span>${share}${heroTarget(ind)}</div>
+    ${contribBar(ind)}
     <div class="legend"><span>${what} · ${esc(title(ind.name))}</span>
       ${state.desa ? `<span><i style="background:var(--orange)"></i>${esc(state.desa)}</span><span><i style="background:var(--gray-bar)"></i>Desa lain</span>` : ''}
       <span><i style="background:transparent;border:1.5px dashed var(--ink-2)"></i>Rata-rata desa</span></div>
@@ -431,7 +519,7 @@ function rankCard(ind) {
     <ul class="rank">${rows.map((r, i) => `<li data-desa="${esc(r.d.name)}" class="${r.d.name === state.desa ? 'sel' : ''}">
       <div class="pos">${isNum(r.v) ? i + 1 : '–'}</div>
       <div class="r-body"><div class="r-name">${esc(r.d.name)}</div><div class="r-bar"><span style="width:${isNum(r.v) ? r.v / max * 100 : 0}%"></span></div></div>
-      <div class="r-val">${fmt(r.v, ind)}</div></li>`).join('')}</ul>
+      <div class="r-val"><span class="rv">${fmt(r.v, ind)}</span>${ind.target && isNum(r.v) ? `<small>${fmtP(pctT(r.v, ind.id))} target</small>` : ''}</div></li>`).join('')}</ul>
   </div>`;
 }
 
@@ -470,6 +558,45 @@ function spmCompareCard() {
   </div>`;
 }
 
+// daftar capaian target per indikator (total ÷ target), atau kontribusi desa terpilih
+function targetCard(cat) {
+  const inds = targetInds(cat); if (!inds.length) return '';
+  const rows = inds.map(i => {
+    const tot = aggregate(i.id), v = state.desa ? current(i.id) : tot;
+    return {i, v, p: pctT(v, i.id), pTot: pctT(tot, i.id)};
+  }).sort((a, b) => (a.pTot ?? 999) - (b.pTot ?? 999));
+  const n = {good: 0, warn: 0, bad: 0}; rows.forEach(r => r.pTot != null && n[STATUS(r.pTot).cls]++);
+  return `<div class="card">
+    <div class="card-head"><div><h2 class="card-title">${state.desa ? `Kontribusi ${esc(state.desa)} terhadap Target` : 'Capaian Target'}</h2>
+      <div class="card-sub">${state.desa ? 'Nilai desa ÷ target wilayah' : 'Total semua desa ÷ target'} · diurutkan dari capaian terendah · klik untuk lihat grafik</div></div>
+      ${state.desa ? '' : `<div class="st-sum">${statusChip(100)} ${n.good} · ${statusChip(80)} ${n.warn} · ${statusChip(0)} ${n.bad}</div>`}</div>
+    <div class="tg-list">${rows.map(r => `<button class="tg-row" data-pick="${r.i.id}">
+      <span class="tg-name">${esc(title(r.i.name))}<small>${fmt(r.v, r.i)} / ${fmt(r.i.target, r.i)}${r.i.percent ? ' (rata-rata desa)' : ''}</small></span>
+      ${progBar(r.p, state.desa ? 'alt' : (r.pTot != null ? STATUS(r.pTot).cls : ''))}
+      <span class="tg-pct">${fmtP(r.p)}</span>
+      <span class="tg-st">${state.desa ? `<small>Total wilayah ${fmtP(r.pTot)}</small>` : statusChip(r.p)}</span>
+    </button>`).join('')}</div>
+  </div>`;
+}
+
+// matriks kontribusi: setiap sel = nilai desa ÷ target indikator
+function matrixCard(cat) {
+  const inds = targetInds(cat); if (!inds.length) return '';
+  const cells = inds.map(i => D.villages.map(d => pctT(val(d, i.id), i.id)));
+  const maxP = Math.max(1, ...cells.flat().filter(p => p != null));
+  const heat = p => p == null ? '' : `background:rgba(31,138,91,${(0.06 + 0.5 * Math.min(p / maxP, 1)).toFixed(3)})`;
+  return `<div class="card" style="margin-top:18px">
+    <div class="card-head"><div><h2 class="card-title">Kontribusi Desa terhadap Target (%)</h2>
+      <div class="card-sub">Sel = nilai desa ÷ target wilayah · makin gelap makin besar kontribusinya · baris bawah = capaian total</div></div></div>
+    <div class="tbl-wrap"><table class="matrix">
+      <thead><tr><th>Desa</th>${inds.map(i => `<th>${esc(title(i.name))}<small>Target ${fmt(i.target, i)}</small></th>`).join('')}</tr></thead>
+      <tbody>${D.villages.map((d, r) => `<tr data-desa="${esc(d.name)}" class="${d.name === state.desa ? 'sel' : ''}" style="cursor:pointer">
+        <td><b>${esc(d.name)}</b></td>${inds.map((i, c) => { const p = cells[c][r]; return `<td class="${p == null ? 'na' : ''}" style="${heat(p)}">${fmtP(p)}</td>`; }).join('')}</tr>`).join('')}</tbody>
+      <tfoot><tr><td>Capaian total</td>${inds.map(i => { const p = pctT(aggregate(i.id), i.id); return `<td><span class="st-txt ${p == null ? '' : STATUS(p).cls}">${fmtP(p)}</span></td>`; }).join('')}</tr></tfoot>
+    </table></div>
+  </div>`;
+}
+
 function dataTable(cat) {
   const inds = catInds(cat);
   return `<div class="card" style="margin-top:18px">
@@ -479,7 +606,9 @@ function dataTable(cat) {
       <thead><tr><th>Desa</th>${inds.map(i => `<th>${esc(title(i.name))}</th>`).join('')}</tr></thead>
       <tbody>${D.villages.map(d => `<tr data-desa="${esc(d.name)}" class="${d.name === state.desa ? 'sel' : ''}" style="cursor:pointer">
         <td><b>${esc(d.name)}</b></td>${inds.map(i => { const v = val(d, i.id); return `<td class="${isNum(v) ? '' : 'na'}">${fmt(v, i)}</td>`; }).join('')}</tr>`).join('')}</tbody>
-      <tfoot><tr><td>Total / Rata²</td>${inds.map(i => `<td>${fmt(aggregate(i.id), i)}</td>`).join('')}</tr></tfoot>
+      <tfoot><tr><td>Total / Rata²</td>${inds.map(i => `<td>${fmt(aggregate(i.id), i)}</td>`).join('')}</tr>
+        ${inds.some(i => i.target) ? `<tr class="t-row2"><td>Target</td>${inds.map(i => `<td class="${i.target ? '' : 'na'}">${i.target ? fmt(i.target, i) : '–'}</td>`).join('')}</tr>
+        <tr class="t-row2"><td>% Capaian</td>${inds.map(i => { const p = pctT(aggregate(i.id), i.id); return `<td class="${p == null ? 'na' : ''}"><span class="st-txt ${p == null ? '' : STATUS(p).cls}">${fmtP(p)}</span></td>`; }).join('')}</tr>` : ''}</tfoot>
     </table></div>
   </div>`;
 }
@@ -487,7 +616,7 @@ function dataTable(cat) {
 /* ---------- render ---------- */
 function render() {
   if (state.desa && !D.villages.some(v => v.name === state.desa)) state.desa = null;
-  save(); renderNav();
+  hideTip(); save(); renderNav();
   const ind = selectedInd(), tab = state.tab;
   let html = '';
   if (tab === 'all') {
@@ -496,6 +625,8 @@ function render() {
     html += tiles(tab, ind);
   }
   html += `<div class="grid row-main">${mainCard(ind)}${rankCard(ind)}</div>`;
+  const tc = targetCard(tab);
+  if (tc) html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${tc}</div>` + matrixCard(tab);
   if (tab === 'all') html += `<div class="grid row-2">${populationCard()}${spmCompareCard()}</div>`;
   if (tab === 'penduduk') html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${populationCard()}</div>`;
   if (tab === 'spm') html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${spmCompareCard()}</div>`;
@@ -531,8 +662,13 @@ function animInner(card, fast) {
   if (rank.length) {
     G.from(rank, {autoAlpha: 0, x: 24, duration: .5 * d, ease: 'power2.out', stagger: .06});
     G.from(card.querySelectorAll('.r-bar span'), {width: 0, duration: .9 * d, ease: 'power3.out', stagger: .06, delay: .15});
-    card.querySelectorAll('.r-val').forEach(el => countUp(el, .9 * d));
+    card.querySelectorAll('.rv').forEach(el => countUp(el, .9 * d));
   }
+  const prog = card.querySelectorAll('.prog span');
+  if (prog.length) G.from(prog, {width: 0, duration: 1 * d, ease: 'power3.out', stagger: .03, delay: .1});
+  const segs = card.querySelectorAll('.contrib .seg');
+  if (segs.length) G.from(segs, {scaleX: 0, transformOrigin: '0% 50%', duration: .5 * d, ease: 'power2.out', stagger: .08, delay: .2});
+  card.querySelectorAll('.tg-pct').forEach(el => countUp(el, 1 * d));
   const stack = card.querySelectorAll('.stack span');
   if (stack.length) G.from(stack, {scaleX: 0, transformOrigin: '0% 50%', duration: .8 * d, ease: 'power3.out', stagger: .04});
   const rows = card.querySelectorAll('tbody tr');
@@ -584,12 +720,20 @@ function bind(ind) {
     state.ind[state.tab] = id; render();
     document.getElementById('barChart')?.scrollIntoView({behavior: 'smooth', block: 'center'});
   });
-  app.querySelectorAll('.bar, .rank li, tbody tr[data-desa], .stack-row').forEach(el => el.addEventListener('click', () => toggleDesa(el.dataset.desa)));
+  app.querySelectorAll('.bar, .rank li, tbody tr[data-desa], .stack-row, .contrib .seg').forEach(el => el.addEventListener('click', () => toggleDesa(el.dataset.desa)));
   app.querySelectorAll('.bar').forEach(el => {
     const d = D.villages[+el.dataset.i], v = val(d, ind.id), tot = aggregate(ind.id);
     el.addEventListener('mousemove', e => showTip(e, `<div class="tt-title">${esc(d.name)}</div>
       <div class="tt-row"><i style="background:${state.desa && d.name !== state.desa ? 'var(--gray-bar)' : state.desa ? 'var(--orange)' : 'var(--green)'}"></i>${fmt(v, ind)}</div>
-      ${isNum(v) && !ind.percent && tot ? `<div class="tt-title" style="margin:4px 0 0">${nf.format(v / tot * 100)}% dari total</div>` : ''}`));
+      ${isNum(v) && !ind.percent && tot ? `<div class="tt-title" style="margin:4px 0 0">${nf.format(v / tot * 100)}% dari total desa</div>` : ''}
+      ${isNum(v) && ind.target ? `<div class="tt-title" style="margin:2px 0 0">${fmtP(pctT(v, ind.id))} dari target ${fmt(ind.target, ind)}</div>` : ''}`));
+    el.addEventListener('mouseleave', hideTip);
+  });
+  app.querySelectorAll('.contrib .seg').forEach(el => {
+    const d = D.villages[+el.dataset.i], v = val(d, ind.id);
+    el.addEventListener('mousemove', e => showTip(e, `<div class="tt-title">${esc(d.name)}</div>
+      <div class="tt-row"><i style="background:${el.classList.contains('sel') ? 'var(--orange)' : 'var(--green)'}"></i>${fmt(v, ind)}</div>
+      <div class="tt-title" style="margin:4px 0 0">Kontribusi ${fmtP(pctT(v, ind.id))} dari target ${fmt(ind.target, ind)}</div>`));
     el.addEventListener('mouseleave', hideTip);
   });
   app.querySelectorAll('.stack-row').forEach(el => {
@@ -608,6 +752,12 @@ document.getElementById('btnExport').onclick = () => {
   const lines = [['Desa', ...inds.map(i => i.name)].map(q).join(',')];
   villages.forEach(v => lines.push([q(v.name), ...inds.map(i => isNum(val(v, i.id)) ? val(v, i.id) : '')].join(',')));
   if (!state.desa) lines.push([q('TOTAL / RATA-RATA'), ...inds.map(i => { const a = aggregate(i.id); return isNum(a) ? +a.toFixed(2) : ''; })].join(','));
+  if (inds.some(i => i.target)) {
+    const r2 = x => x == null ? '' : +x.toFixed(2);
+    lines.push([q('TARGET'), ...inds.map(i => i.target ?? '')].join(','));
+    if (!state.desa) lines.push([q('% CAPAIAN TARGET'), ...inds.map(i => r2(pctT(aggregate(i.id), i.id)))].join(','));
+    villages.forEach(v => lines.push([q(`% KONTRIBUSI ${v.name}`), ...inds.map(i => r2(pctT(val(v, i.id), i.id)))].join(',')));
+  }
   const blob = new Blob(['﻿' + lines.join('\n')], {type: 'text/csv;charset=utf-8'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
