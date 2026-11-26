@@ -22,6 +22,13 @@ Dashboard mengambil data dari Google Sheets yang dipublikasikan sebagai CSV (lin
 - Google men-cache CSV yang dipublikasikan, jadi perubahan di Sheets biasanya baru muncul 1–5 menit kemudian.
 - Susunan kolom & baris di Sheets harus tetap sama dengan format Excel (2 baris header, baris desa bernomor, baris "DATA SPM SD ...").
 
+## Sheet POSYANDU
+Dibaca dari sheet `POSYANDU` (link di `live.js`, variabel `POSYANDU_CSV_URL`). Format: `No, Nama Posyandu, Desa, Dusun, Siklus, JANUARI … DESEMBER, RATA-RATA` (kolom dibaca berdasarkan nama header), nilai dalam %.
+- Kolom **Desa** harus sama dengan nama desa di Sheet1, sehingga filter desa dashboard juga berlaku untuk Posyandu.
+- Siklus: BALITA, BUMIL, LANSIA, REMAJA, USPRO. Bulan kosong diabaikan; "bulan terakhir" = bulan terakhir yang terisi.
+- Rata-rata dihitung ulang dari bulan yang terisi.
+- Data cadangan: `python3 scripts/convert_excel.py sheet1.csv --posyandu posyandu.csv`.
+
 ## Baris TARGET
 Baris berlabel `TARGET` di kolom A (di bawah baris TOTAL) dipakai sebagai pembagi:
 - **% Capaian** = total semua desa ÷ target (kolom persentase seperti D/S memakai rata-rata desa ÷ target).

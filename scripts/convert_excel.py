@@ -4,6 +4,7 @@ Pemakaian:
     pip install openpyxl
     python scripts/convert_excel.py "path/ke/Data Pelayanan UPKD.xlsx"
     python scripts/convert_excel.py "export-google-sheets.csv"   # juga bisa CSV
+    python scripts/convert_excel.py data.xlsx --posyandu posyandu.csv   # + sheet Posyandu
 
 Hasil ditulis ke data.js di folder root dashboard.
 """
@@ -49,7 +50,37 @@ def read_rows(path):
     return [list(r) for r in wb.worksheets[0].iter_rows(values_only=True)]
 
 
-def main(path):
+MONTHS = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+
+
+def roman_title(name):
+    t = name.title()
+    return re.sub(r"\b([IVX]+)$", lambda m: m.group(1).upper(), t, flags=re.I)
+
+
+def read_posyandu(path):
+    rows = read_rows(path)
+    head = [clean(h).upper() for h in rows[0]]
+    m0 = head.index("JANUARI")
+    i_name, i_sik = head.index("NAMA POSYANDU"), head.index("SIKLUS")
+    i_desa = head.index("DESA") if "DESA" in head else None
+    i_dusun = head.index("DUSUN") if "DUSUN" in head else None
+    out = []
+    for r in rows[1:]:
+        if not isinstance(r[0], (int, float)) or not r[i_name]:
+            continue
+        name = roman_title(clean(r[i_name]))
+        out.append({
+            "no": int(r[0]), "name": name, "group": re.sub(r"\s+[IVX]+$", "", name),
+            "desa": clean(r[i_desa]).title() if i_desa is not None else "",
+            "dusun": clean(r[i_dusun]).title() if i_dusun is not None else "",
+            "siklus": clean(r[i_sik]).upper(),
+            "values": [r[m0 + k] if isinstance(r[m0 + k], (int, float)) else None for k in range(12)],
+        })
+    return {"months": MONTHS, "rows": out}
+
+
+def main(path, posyandu=None):
     rows = read_rows(path)
     header = [clean(h) if h is not None else "" for h in rows[1]]
 
@@ -105,6 +136,8 @@ def main(path):
         "villages": villages,
         "compare": compare,
     }
+    if posyandu:
+        data["posyandu"] = read_posyandu(posyandu)
     out = Path(__file__).resolve().parent.parent / "data.js"
     out.write_text("window.UPKD_DATA = " + json.dumps(data, ensure_ascii=False, indent=1) + ";\n",
                    encoding="utf-8")
@@ -112,6 +145,12 @@ def main(path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
+    args = sys.argv[1:]
+    if not args:
         sys.exit(__doc__)
-    main(sys.argv[1])
+    pos = None
+    if "--posyandu" in args:
+        k = args.index("--posyandu")
+        pos = args[k + 1]
+        del args[k:k + 2]
+    main(args[0], pos)

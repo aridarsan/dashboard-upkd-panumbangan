@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard UPKD Panumbangan</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<script>try{var t=localStorage.getItem('upkd-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -16,6 +17,42 @@
   --green:#1f8a5b; --purple:#8e6bd8; --orange:#e86a10; --gray-bar:#dfe6e1; --gray-prev:#b8c2bc;
   --up:#1f8a5b; --down:#d4351c;
   --radius:22px;
+
+  --sel-bg:#fff6ef; --act-bg:#f4fde9; --alt-bg:#ffe7d6; --alt-ink:#8a3a00;
+  --good-bg:#e3f4ea; --good-ink:#17683f; --warn-bg:#fbf0d9; --warn-ink:#8a5a00; --bad-bg:#fbe5e1; --bad-ink:#a5281a; --warn:#c98a12;
+  --tfoot2:#eef3f0; --dim-seg:#b9c9bf; --seg2:#3fa877; --line-2:#cdd7d1; --hover:#ffffff;
+  --header-bg:rgba(242,246,243,.92); --backdrop:rgba(16,28,22,.28); --shadow-rgb:20,40,30;
+  --c-balita:#1F8A5B; --c-bumil:#8E6BD8; --c-lansia:#E86A10; --c-remaja:#2F6FDB; --c-uspro:#C2418F;
+  color-scheme:light;
+}
+/* mode gelap: ikut sistem kecuali dipaksa terang; atau dipaksa gelap lewat tombol */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+  --shell:#0f1512; --card:#18201c; --soft:#212b26; --line:#2c3833; --line-2:#3a4741;
+  --ink:#e6ede8; --ink-2:#a8b5ad; --ink-3:#7c8982;
+  --lime:#b6ef6e; --lime-ink:#1d3a0c;
+  --green:#2FA06C; --purple:#9278E0; --orange:#DC7428; --gray-bar:#33413a; --gray-prev:#55635b;
+  --up:#4cc98a; --down:#f0644d;
+  --sel-bg:#2e2117; --act-bg:#202d17; --alt-bg:#3b2616; --alt-ink:#ffb27a;
+  --good-bg:#173527; --good-ink:#7fe0aa; --warn-bg:#3a2e12; --warn-ink:#f2c869; --bad-bg:#3d1c17; --bad-ink:#ff9a88; --warn:#d69a2a;
+  --tfoot2:#1d2621; --dim-seg:#3b4a42; --seg2:#45b885; --hover:#1d2621;
+  --header-bg:rgba(15,21,18,.88); --backdrop:rgba(0,0,0,.5); --shadow-rgb:0,0,0;
+  --c-balita:#2FA06C; --c-bumil:#9278E0; --c-lansia:#DC7428; --c-remaja:#5B8DEF; --c-uspro:#D9629F;
+  color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --shell:#0f1512; --card:#18201c; --soft:#212b26; --line:#2c3833; --line-2:#3a4741;
+  --ink:#e6ede8; --ink-2:#a8b5ad; --ink-3:#7c8982;
+  --lime:#b6ef6e; --lime-ink:#1d3a0c;
+  --green:#2FA06C; --purple:#9278E0; --orange:#DC7428; --gray-bar:#33413a; --gray-prev:#55635b;
+  --up:#4cc98a; --down:#f0644d;
+  --sel-bg:#2e2117; --act-bg:#202d17; --alt-bg:#3b2616; --alt-ink:#ffb27a;
+  --good-bg:#173527; --good-ink:#7fe0aa; --warn-bg:#3a2e12; --warn-ink:#f2c869; --bad-bg:#3d1c17; --bad-ink:#ff9a88; --warn:#d69a2a;
+  --tfoot2:#1d2621; --dim-seg:#3b4a42; --seg2:#45b885; --hover:#1d2621;
+  --header-bg:rgba(15,21,18,.88); --backdrop:rgba(0,0,0,.5); --shadow-rgb:0,0,0;
+  --c-balita:#2FA06C; --c-bumil:#9278E0; --c-lansia:#DC7428; --c-remaja:#5B8DEF; --c-uspro:#D9629F;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -30,21 +67,26 @@ button,select{font:inherit;color:inherit}
 /* header */
 .top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
   position:sticky;top:0;z-index:30;margin:-20px -24px 0;padding:14px 24px;
-  background:rgba(242,246,243,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  background:var(--header-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
   transition:box-shadow .2s,padding .2s}
-.top.scrolled{box-shadow:0 1px 0 var(--line),0 8px 24px -12px rgba(20,40,30,.18)}
+.top.scrolled{box-shadow:0 1px 0 var(--line),0 8px 24px -12px rgba(var(--shadow-rgb),.18)}
 .top.scrolled .brand-logo{height:38px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;letter-spacing:-.02em;margin-right:auto}
 .brand-logo{height:46px;width:auto;display:block;flex:none}
+:root[data-theme="dark"] .brand-logo{background:#fff;border-radius:10px;padding:3px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .brand-logo{background:#fff;border-radius:10px;padding:3px}}
 .brand small{display:block;font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:0}
 .nav{display:flex;gap:4px;background:var(--card);padding:6px;border-radius:999px;overflow-x:auto;max-width:100%;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav button{border:0;background:transparent;padding:10px 18px;border-radius:999px;cursor:pointer;color:var(--ink-2);white-space:nowrap;font-size:15px}
+.nav button{border:0;background:transparent;padding:10px 15px;border-radius:999px;cursor:pointer;color:var(--ink-2);white-space:nowrap;font-size:15px}
 .nav button:hover{color:var(--ink)}
 .nav button.active{background:var(--lime);color:var(--lime-ink);font-weight:600}
+.nav button{display:inline-flex;align-items:center;gap:7px}
+.nav-ic{flex:none;opacity:.75}
+.nav button.active .nav-ic{opacity:1}
 .top-right{display:flex;align-items:center;gap:10px;margin-left:auto}
 .pill{display:flex;align-items:center;gap:8px;background:var(--card);border:0;border-radius:999px;padding:10px 16px;cursor:pointer;font-size:14px;white-space:nowrap}
-.pill:hover{background:#fafcfb}
+.pill:hover{background:var(--hover)}
 .pill svg{flex:none}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
 .live.ok .live-dot{background:#22b45e;box-shadow:0 0 0 3px rgba(34,180,94,.18)}
@@ -60,8 +102,8 @@ button,select{font:inherit;color:inherit}
 .filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .filters .label{font-size:13px;color:var(--ink-3);margin-right:4px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer;color:var(--ink-2)}
-.chip:hover{border-color:#cdd7d1;color:var(--ink)}
-.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip:hover{border-color:var(--line-2);color:var(--ink)}
+.chip.active{background:var(--ink);border-color:var(--ink);color:var(--card)}
 .chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:6px;vertical-align:1px}
 
 /* grid + cards */
@@ -106,7 +148,7 @@ button,select{font:inherit;color:inherit}
 .chart .bar{cursor:pointer;transition:opacity .15s}
 .chart text{font-family:inherit}
 .tooltip{position:fixed;pointer-events:none;background:var(--card);border-radius:12px;padding:10px 12px;font-size:13px;
-  box-shadow:0 10px 30px -8px rgba(20,40,30,.28);opacity:0;transition:opacity .12s;z-index:20;min-width:140px}
+  box-shadow:0 10px 30px -8px rgba(var(--shadow-rgb),.28);opacity:0;transition:opacity .12s;z-index:20;min-width:140px}
 .tooltip .tt-title{color:var(--ink-3);font-size:12px;margin-bottom:4px}
 .tooltip .tt-row{display:flex;align-items:center;gap:6px;font-weight:600;font-variant-numeric:tabular-nums}
 .tooltip .tt-row i{width:8px;height:8px;border-radius:50%;display:inline-block}
@@ -115,7 +157,7 @@ button,select{font:inherit;color:inherit}
 .rank{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
 .rank li{display:flex;align-items:center;gap:14px;background:var(--soft);border-radius:16px;padding:12px 14px;cursor:pointer;border:2px solid transparent}
 .rank li:hover{border-color:var(--line)}
-.rank li.sel{border-color:var(--orange);background:#fff6ef}
+.rank li.sel{border-color:var(--orange);background:var(--sel-bg)}
 .rank .pos{width:38px;height:38px;border-radius:12px;background:var(--card);display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
 .rank li:first-child .pos{background:var(--lime);color:var(--lime-ink)}
 .rank .r-body{flex:1;min-width:0}
@@ -144,7 +186,7 @@ th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:
 thead th{background:var(--soft);color:var(--ink-2);font-weight:600;font-size:12px;white-space:normal;min-width:96px;vertical-align:bottom;line-height:1.3}
 thead th:first-child{min-width:130px}
 tbody tr{background:var(--card)}
-tbody tr.sel{background:#fff6ef}
+tbody tr.sel{background:var(--sel-bg)}
 tbody tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--orange)}
 tfoot tr{background:var(--soft);font-weight:700}
 tfoot td{border-bottom:0}
@@ -154,24 +196,24 @@ td.na{color:var(--ink-3)}
 
 .prog{height:8px;border-radius:4px;background:var(--gray-bar);overflow:hidden;min-width:60px}
 .prog span{display:block;height:100%;border-radius:4px;background:var(--green)}
-.prog.warn span{background:#c98a12} .prog.bad span{background:var(--down)} .prog.alt span{background:var(--orange)}
+.prog.warn span{background:var(--warn)} .prog.bad span{background:var(--down)} .prog.alt span{background:var(--orange)}
 .st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
 .st b{font-size:11px}
-.st.good{background:#e3f4ea;color:#17683f} .st.warn{background:#fbf0d9;color:#8a5a00} .st.bad{background:#fbe5e1;color:#a5281a}
-.st-txt{font-weight:700} .st-txt.good{color:#17683f} .st-txt.warn{color:#8a5a00} .st-txt.bad{color:#a5281a}
+.st.good{background:var(--good-bg);color:var(--good-ink)} .st.warn{background:var(--warn-bg);color:var(--warn-ink)} .st.bad{background:var(--bad-bg);color:var(--bad-ink)}
+.st-txt{font-weight:700} .st-txt.good{color:var(--good-ink)} .st-txt.warn{color:var(--warn-ink)} .st-txt.bad{color:var(--bad-ink)}
 .st-sum{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
 .kpi-target{margin:-2px 0 12px}
 .kpi-tline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--ink-2)}
 .kpi .kpi-value{margin-bottom:12px}
 .t-target{margin-top:10px} .t-target .t-note{margin-top:6px;color:var(--ink-2)}
-.badge.alt{background:#ffe7d6;color:#8a3a00}
+.badge.alt{background:var(--alt-bg);color:var(--alt-ink)}
 .hero-note{font-size:13px;color:var(--ink-2)}
 .contrib{margin:12px 0 6px}
 .contrib-bar{position:relative;display:flex;gap:2px;height:14px;border-radius:5px;background:var(--gray-bar)}
 .contrib-bar .seg{height:100%;background:var(--green);cursor:pointer;transition:filter .15s}
-.contrib-bar .seg:nth-child(even){background:#3fa877}
+.contrib-bar .seg:nth-child(even){background:var(--seg2)}
 .contrib-bar .seg:first-child{border-radius:5px 0 0 5px}
-.contrib-bar .seg.dim{background:#b9c9bf} .contrib-bar .seg.sel{background:var(--orange)}
+.contrib-bar .seg.dim{background:var(--dim-seg)} .contrib-bar .seg.sel{background:var(--orange)}
 .contrib-bar .seg:hover{filter:brightness(1.12)}
 .contrib-bar .tmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px;transform:translateX(-1px)}
 .contrib-axis{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-3);margin-top:6px}
@@ -187,7 +229,7 @@ td.na{color:var(--ink-3)}
 .tg-st small{font-size:12px;color:var(--ink-3)}
 table.matrix td{font-weight:500}
 thead th small{display:block;font-weight:500;color:var(--ink-3);margin-top:3px}
-tfoot tr.t-row2{background:#eef3f0}
+tfoot tr.t-row2{background:var(--tfoot2)}
 tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 @media (max-width:760px){
   .tg-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name st" "bar pct";gap:8px 12px;align-items:center}
@@ -200,7 +242,7 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 .seg-ctl{display:inline-flex;background:var(--soft);border-radius:999px;padding:4px;gap:2px;flex-wrap:wrap}
 .seg-ctl button{border:0;background:none;border-radius:999px;padding:7px 12px;font-size:13px;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .seg-ctl button:hover{color:var(--ink)}
-.seg-ctl button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(20,40,30,.12)}
+.seg-ctl button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(var(--shadow-rgb),.12)}
 .seg-ctl button em{font-style:normal;font-size:11px;background:var(--gray-bar);border-radius:999px;padding:1px 7px;color:var(--ink-2)}
 .seg-ctl button.on em{background:var(--lime);color:var(--lime-ink)}
 .tg-tools{display:flex;flex-wrap:wrap;gap:10px 20px;margin:14px 0 6px;padding-bottom:14px;border-bottom:1px solid var(--line)}
@@ -208,16 +250,16 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 .tg-lbl{font-size:12px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 .tg-gauges{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:14px}
 .gauge{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--soft);border:2px solid transparent;border-radius:18px;padding:16px 12px 14px;cursor:pointer;text-align:center;color:var(--green)}
-.gauge:hover{border-color:var(--line);background:#fff}
+.gauge:hover{border-color:var(--line);background:var(--hover)}
 .gauge .arc{stroke:currentColor}
-.gauge.warn{color:#c98a12} .gauge.bad{color:var(--down)} .gauge.alt{color:var(--orange)}
+.gauge.warn{color:var(--warn)} .gauge.bad{color:var(--down)} .gauge.alt{color:var(--orange)}
 .gauge .g-pct{position:absolute;top:68px;left:0;right:0;transform:translateY(-50%);font-size:16px;letter-spacing:-.02em;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
 .gauge .g-name{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
 .gauge .g-sub{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .gauge .st{margin-top:4px}
 .tg-colchart{margin-top:14px}
 .colbar{cursor:pointer} .colbar path{fill:var(--green);transition:filter .15s}
-.colbar.warn path{fill:#c98a12} .colbar.bad path{fill:var(--down)} .colbar.alt path{fill:var(--orange)}
+.colbar.warn path{fill:var(--warn)} .colbar.bad path{fill:var(--down)} .colbar.alt path{fill:var(--orange)}
 .colbar:hover path{filter:brightness(1.12)}
 .tg-legend{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:4px 16px}
 .tg-legend li{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 8px;border-radius:10px;cursor:pointer}
@@ -226,6 +268,78 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 .tg-legend span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2)}
 .tg-legend em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
 @media (max-width:760px){.tg-gauges{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gauge{padding:14px 8px 12px}.gauge .g-pct{top:66px}}
+.pill-soft{background:var(--soft)}
+.pos-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:14px}
+.pos-stat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;background:var(--soft);border:2px solid transparent;border-radius:16px;padding:14px;cursor:pointer;text-align:left;min-width:0}
+.pos-stat:hover{border-color:var(--line);background:var(--hover)}
+.ps-name{font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.ps-name i,.sw{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.sw{margin-right:6px;vertical-align:-1px}
+.ps-val{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.ps-delta{font-size:12px;min-height:16px}
+.ps-low{font-size:11px;color:var(--ink-3);line-height:1.3}
+.spark{display:block;max-width:100%}
+.pos-tiles{grid-template-columns:repeat(5,minmax(0,1fr))}
+.pos-tiles .t-name{min-height:0}
+.tline{cursor:pointer}
+.legend .lg{padding:3px 8px;border-radius:999px} .legend .lg.on{background:var(--soft);color:var(--ink);font-weight:600}
+.pos-rank{max-height:440px;overflow-y:auto;overflow-x:hidden;padding-right:4px}
+.pos-rank li{cursor:default}
+.pos-rank .r-name small{font-weight:400;color:var(--ink-3);font-size:12px}
+table.heat td{font-weight:600}
+table.heat th .sw{margin-right:4px}
+@media (max-width:1100px){.pos-sum,.pos-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.pos-sum,.pos-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.theme-btn{order:4;width:42px;height:42px;flex:none;border:0;border-radius:50%;background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s}
+.theme-btn:hover{background:var(--soft)}
+.theme-btn svg{grid-area:1/1}
+.theme-btn .ic-sun{display:none}
+:root[data-theme="dark"] .theme-btn .ic-sun{display:block}
+:root[data-theme="dark"] .theme-btn .ic-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .theme-btn .ic-sun{display:block}
+  :root:not([data-theme="light"]) .theme-btn .ic-moon{display:none}
+}
+.menu-btn{order:5;display:none;align-items:center;gap:10px;border:0;background:var(--card);border-radius:999px;padding:8px 8px 8px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
+.mb-icon{width:34px;height:34px;border-radius:50%;background:var(--lime);display:grid;place-content:center;gap:4px}
+.mb-icon i{display:block;width:16px;height:2px;border-radius:2px;background:var(--lime-ink);transition:transform .25s,opacity .2s}
+.menu-btn[aria-expanded="true"] .mb-icon i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .mb-icon i:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] .mb-icon i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mmenu{position:absolute;left:0;right:0;top:100%;background:var(--shell);padding:6px 16px 18px;border-radius:0 0 24px 24px;
+  box-shadow:0 18px 40px -18px rgba(var(--shadow-rgb),.35);max-height:calc(100vh - 90px);overflow:auto}
+.mmenu[hidden],.mmenu-backdrop[hidden]{display:none}
+.mmenu-backdrop{position:fixed;inset:0;background:var(--backdrop);z-index:29;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.mm-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin:12px 4px 8px}
+.mm-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mm-item{display:flex;align-items:center;gap:10px;border:2px solid transparent;background:var(--card);border-radius:16px;padding:12px;cursor:pointer;text-align:left;min-width:0}
+.mm-item:hover{border-color:var(--line)}
+.mm-item.active{border-color:var(--lime);background:var(--act-bg)}
+.mm-ic{width:36px;height:36px;border-radius:11px;background:var(--soft);display:grid;place-items:center;flex:none;color:var(--ink-2)}
+.mm-item.active .mm-ic{background:var(--lime);color:var(--lime-ink)}
+.mm-txt{min-width:0}
+.mm-txt b{display:block;font-size:14px;font-weight:600}
+.mm-txt small{display:block;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-actions{display:flex;flex-wrap:wrap;gap:8px}
+.mm-actions .pill{background:var(--card)}
+@media (max-width:1400px){
+  .nav,.top-right{display:none}
+  .top{flex-wrap:nowrap}
+  .brand{min-width:0;margin-right:0}
+  .brand > div{min-width:0}
+  .brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .menu-btn{display:flex;flex:none}
+  .theme-btn{margin-left:auto}
+}
+@media (max-width:640px){
+  .brand{font-size:17px;gap:8px}
+  .brand-logo{height:38px}
+  .menu-btn{padding:6px 6px 6px 12px;font-size:13px}
+}
+@media (max-width:380px){.mb-label{display:none}.menu-btn{padding:6px}}
+@media (min-width:1401px){.mmenu,.mmenu-backdrop{display:none !important}}
+@media (max-width:1560px){.top-right .pill-txt{display:none}.top-right .pill{padding:10px 12px}}
+@media (max-width:420px){.mm-list{grid-template-columns:minmax(0,1fr)}}
 .section-label{font-size:13px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 12px}
 .foot{margin-top:24px;font-size:12px;color:var(--ink-3);text-align:center}
 .empty{color:var(--ink-3);font-size:14px;padding:20px 0}
@@ -251,6 +365,7 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
 }
 @media print{
   body,.shell{background:#fff}
+  .theme-btn{display:none}
   .nav,.top-right,.filters{display:none}
 }
 </style>
@@ -263,6 +378,15 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
       <div>Dashboard UPKD<small>UPTD Puskesmas Panumbangan</small></div>
     </div>
     <nav class="nav" id="nav" aria-label="Kategori"></nav>
+    <button class="theme-btn" id="themeBtn" aria-label="Ganti ke mode gelap" title="Ganti ke mode gelap">
+      <svg class="ic-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="ic-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Buka menu kategori">
+      <span class="mb-label" id="menuLabel">Ringkasan</span>
+      <span class="mb-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+    <div class="mmenu" id="mobileMenu" role="menu" aria-label="Menu kategori" hidden></div>
     <div class="top-right">
       <button class="pill live" id="btnRefresh" title="Muat ulang data dari Google Sheets">
         <span class="live-dot" id="liveDot"></span>
@@ -271,11 +395,11 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
       </button>
       <button class="pill" id="btnExport" title="Unduh data tampilan ini (CSV)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
-        Export CSV
+        <span class="pill-txt">Export CSV</span>
       </button>
       <button class="pill" onclick="window.print()" title="Cetak / simpan PDF">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>
-        Cetak
+        <span class="pill-txt">Cetak</span>
       </button>
     </div>
   </header>
@@ -294,14 +418,15 @@ tfoot tr.t-row2 td{border-top:1px solid var(--line)}
   <div class="foot" id="foot"></div>
 </div>
 <div class="tooltip" id="tt" role="tooltip"></div>
+<div class="mmenu-backdrop" id="menuBackdrop" hidden></div>
 
-<script src="data.js?v=4"></script>
-<script src="live.js?v=4"></script>
+<script src="data.js?v=6"></script>
+<script src="live.js?v=6"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 (() => {
-const TABS = [{id:'all', label:'Ringkasan'}, {id:'penduduk', label:'Penduduk'}, {id:'spm', label:'SPM'}, {id:'pmt', label:'PMT'}, {id:'upkd', label:'Pelayanan UPKD'}];
+const TABS = [{id:'all', label:'Ringkasan'}, {id:'penduduk', label:'Penduduk'}, {id:'spm', label:'SPM'}, {id:'pmt', label:'PMT'}, {id:'upkd', label:'Pelayanan UPKD'}, {id:'posyandu', label:'Posyandu'}];
 const KPI_DEF = [
   {re:/^Total Penduduk$/, label:'Jumlah Penduduk', icon:'users'},
   {re:/PESERTA CKG/, label:'Peserta Cek Kesehatan Gratis', icon:'check'},
@@ -320,6 +445,7 @@ setData(window.UPKD_DATA);
 
 const state = { tab: 'all', desa: null, ind: {} };
 try { const s = JSON.parse(localStorage.getItem('upkd-state') || '{}'); Object.assign(state, s); } catch (e) {}
+state.pos = Object.assign({siklus: 'BALITA', sort: 'asc'}, state.pos || {}); delete state.pos.group;
 state.tg = Object.assign({view: 'list', sort: 'asc', status: 'all', cat: 'all'}, state.tg || {});
 const save = () => { try { localStorage.setItem('upkd-state', JSON.stringify(state)); } catch (e) {} };
 
@@ -390,19 +516,104 @@ function showTip(e, html) {
 const hideTip = () => tt.style.opacity = 0;
 
 /* ---------- chrome: nav + filters ---------- */
+/* ---------- tema terang / gelap ---------- */
+const themeBtn = document.getElementById('themeBtn');
+const isDark = () => { const t = document.documentElement.getAttribute('data-theme');
+  return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+function syncThemeBtn() {
+  const label = isDark() ? 'Ganti ke mode terang' : 'Ganti ke mode gelap';
+  themeBtn.setAttribute('aria-label', label); themeBtn.title = label;
+  themeBtn.setAttribute('aria-pressed', String(isDark()));
+}
+themeBtn.addEventListener('click', () => {
+  const next = isDark() ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('upkd-theme', next); } catch (e) {}
+  syncThemeBtn();
+  if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches)
+    gsap.fromTo(themeBtn.querySelectorAll('svg'), {rotate: -90, scale: .5}, {rotate: 0, scale: 1, duration: .45, ease: 'back.out(2)'});
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', syncThemeBtn);
+syncThemeBtn();
+
+/* ---------- menu hamburger (mode responsif) ---------- */
+const TAB_INFO = {
+  all: {ic: '<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>', sub: 'Gambaran semua kategori'},
+  penduduk: {ic: ICONS.users, sub: 'Laki-laki & perempuan'},
+  spm: {ic: '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>', sub: 'Standar Pelayanan Minimal'},
+  pmt: {ic: '<path d="M3 11h18a9 9 0 0 1-18 0zM7 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5M17 7c0-1.5 1-2 1-3.5"/>', sub: 'Pemberian makanan tambahan'},
+  upkd: {ic: ICONS.home, sub: 'Kunjungan, kader, kasus'},
+  posyandu: {ic: '<circle cx="12" cy="6" r="3"/><path d="M6 21v-2a6 6 0 0 1 12 0v2M9 13l3 3 3-3"/>', sub: 'Capaian per siklus & bulan'},
+};
+const menuBtn = document.getElementById('menuBtn'), mmenu = document.getElementById('mobileMenu'), mback = document.getElementById('menuBackdrop');
+function renderMenu() {
+  const cur = TABS.find(t => t.id === state.tab);
+  document.getElementById('menuLabel').textContent = cur ? cur.label : '';
+  mmenu.innerHTML = `<div class="mm-label">Kategori</div>
+    <div class="mm-list">${TABS.filter(t => t.id !== 'posyandu' || D.posyandu).map(t => { const inf = TAB_INFO[t.id] || {};
+      return `<button class="mm-item ${t.id === state.tab ? 'active' : ''}" role="menuitem" data-tab="${t.id}" ${t.id === state.tab ? 'aria-current="page"' : ''}>
+        <span class="mm-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${inf.ic || ''}</svg></span>
+        <span class="mm-txt"><b>${t.label}</b><small>${inf.sub || ''}</small></span></button>`; }).join('')}</div>
+    <div class="mm-label">Aksi</div>
+    <div class="mm-actions">
+      <button class="pill" data-act="refresh"><span class="live-dot" style="background:${document.getElementById('btnRefresh').classList.contains('ok') ? '#22b45e' : 'var(--ink-3)'}"></span>${esc(document.getElementById('liveText').textContent)} · Muat ulang</button>
+      <button class="pill" data-act="export">Export CSV</button>
+      <button class="pill" data-act="print">Cetak</button>
+    </div>`;
+}
+function setMenu(open) {
+  if (open === !mmenu.hidden) return;
+  if (open) {
+    renderMenu(); mmenu.hidden = false; mback.hidden = false;
+    menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Tutup menu kategori');
+    if (motionOK) {
+      G.fromTo(mmenu, {y: -10, autoAlpha: 0}, {y: 0, autoAlpha: 1, duration: .25, ease: 'power2.out'});
+      G.from(mmenu.querySelectorAll('.mm-item, .mm-actions .pill'), {y: -8, autoAlpha: 0, duration: .25, stagger: .03, delay: .05});
+      G.fromTo(mback, {autoAlpha: 0}, {autoAlpha: 1, duration: .2});
+    }
+    mmenu.querySelector('.mm-item.active, .mm-item')?.focus({preventScroll: true});
+  } else {
+    mmenu.hidden = true; mback.hidden = true;
+    menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Buka menu kategori');
+  }
+}
+menuBtn.addEventListener('click', () => setMenu(mmenu.hidden));
+mback.addEventListener('click', () => setMenu(false));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !mmenu.hidden) { setMenu(false); menuBtn.focus(); } });
+addEventListener('resize', () => { if (innerWidth > 1400) setMenu(false); });
+mmenu.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab]'), a = e.target.closest('[data-act]');
+  if (t) { setMenu(false); if (state.tab !== t.dataset.tab) { window.scrollTo({top: 0}); state.tab = t.dataset.tab; render(); } }
+  if (a) {
+    setMenu(false);
+    if (a.dataset.act === 'refresh') document.getElementById('btnRefresh').click();
+    if (a.dataset.act === 'export') document.getElementById('btnExport').click();
+    if (a.dataset.act === 'print') setTimeout(() => window.print(), 50);
+  }
+});
+
 function renderNav() {
-  document.getElementById('nav').innerHTML = TABS.map(t =>
-    `<button data-tab="${t.id}" class="${t.id === state.tab ? 'active' : ''}">${t.label}</button>`).join('');
+  renderMenu();
+  document.getElementById('nav').innerHTML = TABS.filter(t => t.id !== 'posyandu' || D.posyandu).map(t =>
+    `<button data-tab="${t.id}" class="${t.id === state.tab ? 'active' : ''}" ${t.id === state.tab ? 'aria-current="page"' : ''} title="${(TAB_INFO[t.id] || {}).sub || ''}">
+      <svg class="nav-ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${(TAB_INFO[t.id] || {}).ic || ''}</svg>${t.label}</button>`).join('');
   document.getElementById('filters').innerHTML = `<span class="label">Filter desa:</span>` +
     [null, ...D.villages.map(v => v.name)].map(n =>
       `<button class="chip ${n === state.desa ? 'active' : ''}" data-desa="${n ?? ''}">${n && n === state.desa ? '<span class="dot"></span>' : ''}${n ?? 'Semua Desa'}</button>`).join('');
-  const tab = TABS.find(t => t.id === state.tab);
+  if (state.tab === 'posyandu') {
+    const n = D.posyandu ? posNames().length : 0;
+    document.getElementById('pageTitle').textContent = state.desa ? `Posyandu · Desa ${state.desa}` : 'Posyandu';
+    document.getElementById('pageSub').textContent = D.posyandu
+      ? `${n} posyandu${state.desa ? '' : ' di ' + D.villages.length + ' desa'} · capaian % per siklus Jan–${D.posyandu.months[lastMonth()]} · Wilayah ${D.subtitle}` : '';
+    return;
+  }
   document.getElementById('pageTitle').textContent = state.tab === 'all' ? 'Dashboard Pelayanan UPKD 👋' : CAT[state.tab].label;
   document.getElementById('pageSub').textContent =
     `${state.desa ? 'Desa ' + state.desa : D.villages.length + ' desa'} · Wilayah ${D.subtitle} · Data ${D.period}`;
 }
 document.getElementById('nav').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
+  if (state.tab !== b.dataset.tab) window.scrollTo({top: 0});
   state.tab = b.dataset.tab; render();
 });
 document.getElementById('filters').addEventListener('click', e => {
@@ -484,7 +695,7 @@ function barChart(ind) {
       mark = `<path d="M${cx - bw / 2},${pt + ih} V${top + r} Q${cx - bw / 2},${top} ${cx - bw / 2 + r},${top} H${cx + bw / 2 - r} Q${cx + bw / 2},${top} ${cx + bw / 2},${top + r} V${pt + ih} Z" fill="${fill}"/>`;
       if (sel || (!state.desa && v === Math.max(...nums)))
         mark += `<text x="${cx}" y="${top - 8}" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">${fmt(v, ind)}</text>`;
-      if (sel) mark += `<circle cx="${cx}" cy="${top}" r="5" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/>`;
+      if (sel) mark += `<circle cx="${cx}" cy="${top}" r="5" fill="var(--card)" stroke="var(--orange)" stroke-width="2.5"/>`;
     } else {
       mark = `<text x="${cx}" y="${pt + ih - 8}" text-anchor="middle" font-size="12" fill="var(--ink-3)">n/a</text>`;
     }
@@ -657,7 +868,7 @@ function tgGauges(rows) {
         <circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--gray-bar)" stroke-width="9"/>
         <circle class="arc" cx="50" cy="50" r="${R}" fill="none" stroke-width="9" stroke-linecap="round"
           stroke-dasharray="${len.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 50 50)"/>
-        ${p > 100 ? `<circle cx="50" cy="${50 - R}" r="5.5" fill="#fff" stroke="currentColor" stroke-width="2.5"/>` : ''}
+        ${p > 100 ? `<circle cx="50" cy="${50 - R}" r="5.5" fill="var(--card)" stroke="currentColor" stroke-width="2.5"/>` : ''}
       </svg>
       <span class="g-pct">${fmtP(r.p)}</span>
       <span class="g-name">${esc(shortName(r.i.name))}</span>
@@ -716,7 +927,7 @@ function matrixCard(cat) {
   const inds = targetInds(cat); if (!inds.length) return '';
   const cells = inds.map(i => D.villages.map(d => pctT(val(d, i.id), i.id)));
   const maxP = Math.max(1, ...cells.flat().filter(p => p != null));
-  const heat = p => p == null ? '' : `background:rgba(31,138,91,${(0.06 + 0.5 * Math.min(p / maxP, 1)).toFixed(3)})`;
+  const heat = p => p == null ? '' : `background:color-mix(in srgb, var(--green) ${Math.round((0.06 + 0.5 * Math.min(p / maxP, 1)) * 100)}%, transparent)`;
   return `<div class="card" style="margin-top:18px">
     <div class="card-head"><div><h2 class="card-title">Kontribusi Desa terhadap Target (%)</h2>
       <div class="card-sub">Sel = nilai desa ÷ target wilayah · makin gelap makin besar kontribusinya · baris bawah = capaian total</div></div></div>
@@ -745,10 +956,189 @@ function dataTable(cat) {
   </div>`;
 }
 
+/* ---------- POSYANDU (sheet POSYANDU: % per siklus per bulan) ---------- */
+const SIKLUS = [
+  {id: 'BALITA', label: 'Balita', color: 'var(--c-balita)'},
+  {id: 'BUMIL', label: 'Ibu Hamil', color: 'var(--c-bumil)'},
+  {id: 'LANSIA', label: 'Lansia', color: 'var(--c-lansia)'},
+  {id: 'REMAJA', label: 'Remaja', color: 'var(--c-remaja)'},
+  {id: 'USPRO', label: 'Usia Produktif', color: 'var(--c-uspro)'},
+];
+const SK = Object.fromEntries(SIKLUS.map(s => [s.id, s]));
+const P = () => D.posyandu;
+const mean = a => { const v = a.filter(isNum); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null; };
+// cakupan filter Posyandu mengikuti filter desa dashboard
+const posScope = () => state.desa || 'all';
+const posRows = (siklus, scope = posScope()) => P().rows.filter(r => r.siklus === siklus && (scope === 'all' || r.desa === scope));
+const posGroups = () => [...new Set(P().rows.map(r => r.group))];
+const scopeTxt = () => state.desa ? 'posyandu Desa ' + esc(state.desa) : 'semua posyandu';
+const posNames = () => [...new Set(P().rows.filter(r => !state.desa || r.desa === state.desa).map(r => r.name))];
+const lastMonth = () => { let k = -1; P().rows.forEach(r => r.values.forEach((v, i) => { if (isNum(v) && i > k) k = i; })); return k; };
+const monthAvg = (siklus, k, group) => mean(posRows(siklus, group).map(r => r.values[k]));
+const ytd = r => mean(r.values);
+const fmtPct = v => isNum(v) ? nf.format(v) + '%' : '–';
+function posStats(siklus, group) {
+  const L = lastMonth(), rows = posRows(siklus, group);
+  const series = P().months.map((_, k) => k <= L ? monthAvg(siklus, k, group) : null);
+  const now = series[L], prev = L > 0 ? series[L - 1] : null;
+  const ranked = rows.map(r => ({r, v: r.values[L]})).filter(x => isNum(x.v)).sort((a, b) => a.v - b.v);
+  return {L, series, now, prev, delta: isNum(now) && isNum(prev) ? now - prev : null, ytd: mean(rows.map(ytd)),
+    low: ranked[0], full: ranked.filter(x => x.v >= 100).length, n: rows.length};
+}
+function spark(series, color, w = 120, h = 34) {
+  const pts = series.map((v, i) => isNum(v) ? [i / (series.length - 1) * (w - 4) + 2, h - 3 - v / 100 * (h - 6)] : null).filter(Boolean);
+  if (pts.length < 2) return '';
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  const last = pts[pts.length - 1];
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><path d="${d}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="${color}"/></svg>`;
+}
+const deltaTxt = d => !isNum(d) ? '' : `<span class="chg ${d > 0 ? 'up' : d < 0 ? 'down' : 'zero'}">${d > 0 ? '▲ +' : d < 0 ? '▼ ' : '• '}${nf.format(d)} poin</span>`;
+
+// kartu ringkas untuk tab Ringkasan
+function posyanduSummaryCard() {
+  if (!P()) return '';
+  const L = lastMonth(), mName = P().months[L] || '';
+  return `<div class="card" style="margin-top:18px">
+    <div class="card-head"><div><h2 class="card-title">Posyandu</h2>
+      <div class="card-sub">${posNames().length} posyandu${state.desa ? ' Desa ' + esc(state.desa) : ' di ' + D.villages.length + ' desa'} · rata-rata capaian per siklus, bulan ${mName} (garis = tren Jan–${mName})</div></div>
+      <button class="pill pill-soft" data-tab-go="posyandu">Lihat detail Posyandu ${icon('arrow', 14)}</button></div>
+    <div class="pos-sum">${SIKLUS.map(s => { const st = posStats(s.id, posScope()); return `<button class="pos-stat" data-tab-go="posyandu" data-siklus="${s.id}">
+        <span class="ps-name"><i style="background:${s.color}"></i>${s.label}</span>
+        <span class="ps-val t-val">${fmtPct(st.now)}</span>
+        <span class="ps-delta">${deltaTxt(st.delta)}</span>
+        ${spark(st.series, s.color)}
+        <span class="ps-low">${st.low ? `Terendah: ${esc(st.low.r.name)} (${fmtPct(st.low.v)})` : ''}</span>
+      </button>`; }).join('')}</div>
+  </div>`;
+}
+
+function posTiles() {
+  const g = posScope();
+  return `<div class="grid tiles pos-tiles">${SIKLUS.map(s => { const st = posStats(s.id, g); return `<button class="tile ${s.id === state.pos.siklus ? 'active' : ''}" data-siklus="${s.id}">
+    <div class="t-name"><i class="sw" style="background:${s.color}"></i>${s.label}</div>
+    <div class="t-row"><div class="t-val">${fmtPct(st.now)}</div>${spark(st.series, s.color, 90, 30)}</div>
+    <div class="t-note">${deltaTxt(st.delta) || '&nbsp;'}</div>
+    <div class="t-note">Rata-rata Jan–${P().months[st.L]}: ${fmtPct(st.ytd)} · ${st.full}/${st.n} posyandu 100%</div>
+  </button>`; }).join('')}</div>`;
+}
+
+function trendCard() {
+  const g = posScope(), L = lastMonth(), months = P().months;
+  const appW = document.getElementById('app').clientWidth || 1200, narrow = appW < 700;
+  const W = narrow ? Math.max(300, appW - 36) : 760, H = 300, pl = 40, pr = narrow ? 12 : 96, pt = 16, pb = 30;
+  const iw = W - pl - pr, ih = H - pt - pb, x = k => pl + k / (L || 1) * iw, y = v => pt + ih - v / 100 * ih;
+  let grid = '';
+  for (let t = 0; t <= 100; t += 25) grid += `<line x1="${pl}" x2="${pl + iw}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)" ${t ? 'stroke-dasharray="3 4"' : ''}/><text x="${pl - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)">${t}%</text>`;
+  const xl = months.slice(0, L + 1).map((m, k) => (narrow && k % 2) ? '' : `<text x="${x(k)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${m}</text>`).join('');
+  const all = SIKLUS.map(s => ({s, series: posStats(s.id, g).series}));
+  // posisi label ujung garis: urutkan & beri jarak minimal 14px agar tidak bertumpuk
+  const ends = all.map(({s, series}) => { let k = series.length - 1; while (k >= 0 && !isNum(series[k])) k--; return {id: s.id, k, y: k >= 0 ? y(series[k]) : null}; })
+    .filter(e => e.y != null).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+  const endY = Object.fromEntries(ends.map(e => [e.id, e.y]));
+  const lines = all.map(({s, series}) => {
+    const pts = series.map((v, k) => isNum(v) ? [x(k), y(v)] : null);
+    const d = pts.filter(Boolean).map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+    const on = s.id === state.pos.siklus, last = pts.filter(Boolean).pop();
+    return `<g class="tline ${on ? 'on' : ''}" data-siklus="${s.id}"><path class="line" d="${d}" fill="none" stroke="${s.color}" stroke-width="${on ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round" opacity="${on ? 1 : .55}"/>
+      ${pts.map(p => p ? `<circle cx="${p[0]}" cy="${p[1]}" r="${on ? 4 : 3}" fill="var(--card)" stroke="${s.color}" stroke-width="2" opacity="${on ? 1 : .55}"/>` : '').join('')}
+      ${!narrow && last ? `<text class="end" x="${last[0] + 10}" y="${endY[s.id] + 4}" font-size="12" font-weight="${on ? 700 : 500}" fill="var(--ink-2)">${s.label}</text>` : ''}</g>`;
+  });
+  // label akhir: hindari tumpang tindih sederhana (geser vertikal)
+  const hits = months.slice(0, L + 1).map((_, k) => `<rect class="hit" data-k="${k}" x="${x(k) - iw / (L || 1) / 2}" y="${pt}" width="${iw / (L || 1)}" height="${ih}" fill="transparent"/>`).join('');
+  return `<div class="card">
+    <div class="card-head" style="flex-wrap:wrap"><div><h2 class="card-title">Tren Bulanan per Siklus</h2>
+      <div class="card-sub">Rata-rata capaian ${scopeTxt()} · klik legenda atau kartu siklus untuk menyorot</div></div></div>
+    <div class="legend" style="margin:6px 0 0">${SIKLUS.map(s => `<span class="lg ${s.id === state.pos.siklus ? 'on' : ''}" data-siklus="${s.id}" style="cursor:pointer"><i style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>
+    <div class="chart" id="trendChart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tren bulanan capaian posyandu per siklus">${grid}${xl}
+      <line id="xhair" x1="0" x2="0" y1="${pt}" y2="${pt + ih}" stroke="var(--ink-3)" stroke-dasharray="3 3" opacity="0"/>${lines.join('')}${hits}</svg></div>
+  </div>`;
+}
+
+function posRankCard() {
+  const s = SK[state.pos.siklus], L = lastMonth();
+  const rows = posRows(s.id).map(r => ({r, v: ytd(r), now: r.values[L]}));
+  rows.sort((a, b) => state.pos.sort === 'asc' ? (a.v ?? 999) - (b.v ?? 999) : (b.v ?? -1) - (a.v ?? -1));
+  return `<div class="card">
+    <div class="card-head" style="flex-wrap:wrap"><div><h2 class="card-title">Peringkat Posyandu</h2><div class="card-sub">${s.label} · rata-rata Jan–${P().months[L]}</div></div>
+      ${seg('psort', [['asc', '↑ Terendah'], ['desc', '↓ Tertinggi']], state.pos.sort)}</div>
+    <ul class="rank pos-rank">${rows.map((x, i) => `<li title="${esc(x.r.name)} · Dusun ${esc(x.r.dusun)}">
+      <div class="pos">${i + 1}</div>
+      <div class="r-body"><div class="r-name">${esc(x.r.name)} <small>${state.desa ? '' : esc(x.r.desa || '') + ' · '}${esc(x.r.dusun)}</small></div><div class="r-bar"><span style="width:${Math.min(x.v || 0, 100)}%;background:${s.color}"></span></div></div>
+      <div class="r-val"><span class="rv">${fmtPct(x.v)}</span><small>${P().months[L]}: ${fmtPct(x.now)}</small></div></li>`).join('')}</ul>
+  </div>`;
+}
+
+function heatCard() {
+  const s = SK[state.pos.siklus], L = lastMonth(), months = P().months.slice(0, L + 1);
+  const rows = posRows(s.id);
+  const cell = v => !isNum(v) ? `<td class="na">–</td>` : `<td style="background:color-mix(in srgb, ${s.color} ${Math.round((0.08 + 0.62 * Math.min(v, 100) / 100) * 100)}%, transparent);color:${v >= 70 ? '#fff' : 'var(--ink)'}">${nf.format(v)}</td>`;
+  return `<div class="card" style="margin-top:18px">
+    <div class="card-head"><div><h2 class="card-title">Peta Panas Bulanan · ${s.label}</h2>
+      <div class="card-sub">Nilai % per posyandu per bulan · makin pekat makin tinggi · pilih siklus lewat kartu di atas</div></div></div>
+    <div class="tbl-wrap"><table class="heat">
+      <thead><tr><th>Posyandu</th><th style="text-align:left">Desa / Dusun</th>${months.map(m => `<th>${m}</th>`).join('')}<th>Rata²</th></tr></thead>
+      <tbody>${rows.map(r => `<tr><td><b>${esc(r.name)}</b></td><td style="text-align:left;color:var(--ink-2)">${esc(r.desa || '')}<br><small>${esc(r.dusun)}</small></td>${r.values.slice(0, L + 1).map(cell).join('')}<td><b>${fmtPct(ytd(r))}</b></td></tr>`).join('')}</tbody>
+      <tfoot><tr><td>Rata-rata</td><td></td>${months.map((_, k) => `<td>${fmtPct(mean(rows.map(r => r.values[k])))}</td>`).join('')}<td>${fmtPct(mean(rows.map(ytd)))}</td></tr></tfoot>
+    </table></div>
+  </div>`;
+}
+
+function posMatrixCard() {
+  const names = posNames();
+  const get = (n, sk) => P().rows.find(r => r.name === n && r.siklus === sk);
+  return `<div class="card" style="margin-top:18px">
+    <div class="card-head"><div><h2 class="card-title">Rekap Posyandu × Siklus</h2>
+      <div class="card-sub">Rata-rata Jan–${P().months[lastMonth()]} per siklus</div></div></div>
+    <div class="tbl-wrap"><table class="heat">
+      <thead><tr><th>Posyandu</th><th style="text-align:left">Desa / Dusun</th>${SIKLUS.map(s => `<th><i class="sw" style="background:${s.color}"></i>${s.label}</th>`).join('')}</tr></thead>
+      <tbody>${names.map(n => { const any = P().rows.find(r => r.name === n); return `<tr><td><b>${esc(n)}</b></td><td style="text-align:left;color:var(--ink-2)">${esc(any.desa || '')}<br><small>${esc(any.dusun)}</small></td>${SIKLUS.map(s => { const r = get(n, s.id), v = r ? ytd(r) : null;
+        return isNum(v) ? `<td style="background:color-mix(in srgb, var(--green) ${Math.round((0.06 + 0.5 * Math.min(v, 100) / 100) * 100)}%, transparent)">${fmtPct(v)}</td>` : '<td class="na">–</td>'; }).join('')}</tr>`; }).join('')}</tbody>
+    </table></div>
+  </div>`;
+}
+
+function posyanduView() {
+  if (!P()) return `<div class="card"><div class="empty">Data Posyandu belum tersedia.</div></div>`;
+  return posTiles()
+    + `<div class="grid row-main">${trendCard()}${posRankCard()}</div>`
+    + heatCard() + posMatrixCard();
+}
+
+function bindPosyandu(root) {
+  root.querySelectorAll('[data-siklus]').forEach(el => el.addEventListener('click', e => {
+    if (el.dataset.tabGo) return; // ditangani oleh data-tab-go
+    e.stopPropagation(); state.pos.siklus = el.dataset.siklus; render();
+  }));
+  root.querySelectorAll('[data-tg="psort"]').forEach(b => b.onclick = e => { e.stopPropagation(); state.pos.sort = b.dataset.v; render(); });
+  const svg = root.querySelector('#trendChart svg');
+  if (svg) {
+    const xh = svg.querySelector('#xhair');
+    svg.querySelectorAll('.hit').forEach(h => {
+      const k = +h.dataset.k;
+      h.addEventListener('mousemove', e => {
+        const cx = +h.getAttribute('x') + +h.getAttribute('width') / 2;
+        xh.setAttribute('x1', cx); xh.setAttribute('x2', cx); xh.setAttribute('opacity', 1);
+        const vals = SIKLUS.map(s => ({s, v: monthAvg(s.id, k, posScope())})).sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
+        showTip(e, `<div class="tt-title">${P().months[k]} · ${scopeTxt()}</div>` +
+          vals.map(x => `<div class="tt-row"><i style="background:${x.s.color}"></i>${x.s.label}: ${fmtPct(x.v)}</div>`).join(''));
+      });
+      h.addEventListener('mouseleave', () => { xh.setAttribute('opacity', 0); hideTip(); });
+    });
+  }
+}
+
 /* ---------- render ---------- */
 function render() {
   if (state.desa && !D.villages.some(v => v.name === state.desa)) state.desa = null;
+  if (state.tab === 'posyandu' && !D.posyandu) state.tab = 'all';
   hideTip(); save(); renderNav();
+  if (state.tab === 'posyandu') {
+    document.getElementById('app').innerHTML = posyanduView();
+    bindPosyandu(document.getElementById('app')); bindTabGo(document.getElementById('app'));
+    runAnim(nextAnim); nextAnim = 'change';
+    return;
+  }
   const ind = selectedInd(), tab = state.tab;
   let html = '';
   if (tab === 'all') {
@@ -759,13 +1149,21 @@ function render() {
   html += `<div class="grid row-main">${mainCard(ind)}${rankCard(ind)}</div>`;
   const tc = targetCard(tab);
   if (tc) html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${tc}</div>` + matrixCard(tab);
+  if (tab === 'all') html += posyanduSummaryCard();
   if (tab === 'all') html += `<div class="grid row-2">${populationCard()}${spmCompareCard()}</div>`;
   if (tab === 'penduduk') html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${populationCard()}</div>`;
   if (tab === 'spm') html += `<div class="grid row-2" style="grid-template-columns:minmax(0,1fr)">${spmCompareCard()}</div>`;
   html += dataTable(tab);
   document.getElementById('app').innerHTML = html;
-  bind(ind);
+  bind(ind); bindTabGo(document.getElementById('app'));
   runAnim(nextAnim); nextAnim = 'change';
+}
+function bindTabGo(root) {
+  root.querySelectorAll('[data-tab-go]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    if (b.dataset.siklus) state.pos.siklus = b.dataset.siklus;
+    state.tab = b.dataset.tabGo; window.scrollTo({top: 0}); render();
+  });
 }
 
 /* ---------- animasi (GSAP) ---------- */
@@ -801,6 +1199,12 @@ function animInner(card, fast) {
   const segs = card.querySelectorAll('.contrib .seg');
   if (segs.length) G.from(segs, {scaleX: 0, transformOrigin: '0% 50%', duration: .5 * d, ease: 'power2.out', stagger: .08, delay: .2});
   card.querySelectorAll('.tg-pct, .g-pct').forEach(el => countUp(el, 1 * d));
+  card.querySelectorAll('.tline path.line, .spark path').forEach(p => {
+    const len = p.getTotalLength ? p.getTotalLength() : 0; if (!len) return;
+    G.fromTo(p, {strokeDasharray: len, strokeDashoffset: len}, {strokeDashoffset: 0, duration: 1.2 * d, ease: 'power2.inOut', onComplete: () => { p.style.strokeDasharray = 'none'; }});
+  });
+  const tdots = card.querySelectorAll('.tline circle, .tline text.end');
+  if (tdots.length) G.from(tdots, {autoAlpha: 0, duration: .3, delay: .9 * d, stagger: .005});
   const arcs = card.querySelectorAll('.gauge .arc');
   if (arcs.length) G.from(arcs, {attr: {'stroke-dasharray': '0 999'}, duration: 1.1 * d, ease: 'power3.out', stagger: .04});
   const gs = card.querySelectorAll('.gauge');
@@ -846,7 +1250,7 @@ function runAnim(mode) {
   const later = items.filter(e => e.getBoundingClientRect().top > fold);
   if (now.length) enter(now);
   if (later.length) {
-    if (ST) ST.batch(later, {start: 'top 92%', once: true, onEnter: enter, onEnterBack: enter});
+    if (ST) { ST.batch(later, {start: 'top 92%', once: true, onEnter: enter, onEnterBack: enter}); ST.refresh(); }
     else enter(later);
   }
 }
@@ -892,6 +1296,17 @@ function bind(ind) {
 
 /* ---------- export ---------- */
 document.getElementById('btnExport').onclick = () => {
+  if (state.tab === 'posyandu' && D.posyandu) {
+    const q = s => `"${String(s).replace(/"/g, '""')}"`;
+    const rows = D.posyandu.rows.filter(r => !state.desa || r.desa === state.desa);
+    const lines = [['Posyandu', 'Desa', 'Dusun', 'Siklus', ...D.posyandu.months, 'Rata-rata'].map(q).join(',')];
+    rows.forEach(r => lines.push([q(r.name), q(r.desa || ''), q(r.dusun), q(r.siklus), ...r.values.map(v => isNum(v) ? v : ''), (x => isNum(x) ? +x.toFixed(2) : '')(ytd(r))].join(',')));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\ufeff' + lines.join('\n')], {type: 'text/csv;charset=utf-8'}));
+    a.download = `UPKD_posyandu${state.desa ? '_' + state.desa : ''}.csv`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return;
+  }
   const inds = catInds(state.tab);
   const villages = state.desa ? D.villages.filter(v => v.name === state.desa) : D.villages;
   const q = s => `"${String(s).replace(/"/g, '""')}"`;
@@ -924,7 +1339,8 @@ async function refresh() {
   try {
     const d = await LIVE.load();
     const scrollY = window.scrollY;
-    const sig = x => JSON.stringify([x.indicators, x.villages, x.compare]);
+    if (!d.posyandu && D.posyandu) d.posyandu = D.posyandu; // sheet Posyandu gagal dimuat: pakai yang lama
+    const sig = x => JSON.stringify([x.indicators, x.villages, x.compare, x.posyandu]);
     const changed = sig(d) !== sig(D);
     setData(d);
     if (changed) { nextAnim = 'none'; render(); }
@@ -950,8 +1366,9 @@ const onScroll = () => {
 };
 addEventListener('scroll', onScroll, {passive: true}); onScroll();
 
-let lastNarrow = innerWidth < 760, rt;
-addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { const n = innerWidth < 760; if (n !== lastNarrow) { lastNarrow = n; nextAnim = 'none'; render(); } }, 150); });
+const isNarrow = () => (document.getElementById('app').clientWidth || innerWidth) < 700;
+let lastNarrow = isNarrow(), rt;
+addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { const n = isNarrow(); if (n !== lastNarrow) { lastNarrow = n; nextAnim = 'none'; render(); } }, 150); });
 render();
 refresh();
 })();
